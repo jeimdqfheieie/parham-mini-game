@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مسابقه‌ی جاده‌ای</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 3px solid #00ff88;
+            border-radius: 12px;
+            box-shadow: 0 0 40px #00ff8866;
+            background: #1a1a2e;
+        }
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 22px;
+            background: #000000aa;
+            padding: 10px 30px;
+            border-radius: 30px;
+            border: 1px solid #00ff88;
+            backdrop-filter: blur(6px);
+            text-align: center;
+            pointer-events: none;
+        }
+        #info span {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        #controls-note {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #aaa;
+            font-size: 14px;
+            background: #00000088;
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="info">🏁 امتیاز: <span id="scoreDisplay">0</span></div>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div id="controls-note">⬅️ ➡️ حرکت با کلیدهای جهت‌دار | 🚀 Esc = شروع مجدد</div>
+
+    <script>
+        // ---------- تنظیمات ----------
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreSpan = document.getElementById('scoreDisplay');
+
+        const LANE_COUNT = 3;
+        const LANE_WIDTH = 120;
+        const CAR_WIDTH = 50;
+        const CAR_HEIGHT = 80;
+        const OBSTACLE_WIDTH = 45;
+        const OBSTACLE_HEIGHT = 70;
+
+        let carX = LANE_WIDTH; // موقعیت اولیه (خط وسط)
+        let score = 0;
+        let gameOver = false;
+
+        // موانع
+        let obstacles = [];
+        let frame = 0;
+        let speed = 3;
+
+        // تنظیمات خطوط جاده
+        let roadOffset = 0;
+
+        // ---------- کلیدها ----------
+        let keys = {
+            ArrowLeft: false,
+            ArrowRight: false
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                keys[e.key] = true;
+            }
+            if (e.key === 'Escape' && gameOver) {
+                resetGame();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                keys[e.key] = false;
+            }
+        });
+
+        // ---------- توابع بازی ----------
+        function resetGame() {
+            carX = LANE_WIDTH;
+            score = 0;
+            gameOver = false;
+            obstacles = [];
+            frame = 0;
+            speed = 3;
+            updateScore();
+        }
+
+        function updateScore() {
+            scoreSpan.textContent = score;
+        }
+
+        // تولید مانع تصادفی
+        function spawnObstacle() {
+            const lane = Math.floor(Math.random() * LANE_COUNT);
+            const x = lane * LANE_WIDTH + (LANE_WIDTH - OBSTACLE_WIDTH) / 2;
+            obstacles.push({
+                x: x,
+                y: -OBSTACLE_HEIGHT,
+                lane: lane
+            });
+        }
+
+        // برخورد‌یابی
+        function checkCollision(car, obstacle) {
+            return car.x < obstacle.x + OBSTACLE_WIDTH &&
+                car.x + CAR_WIDTH > obstacle.x &&
+                car.y < obstacle.y + OBSTACLE_HEIGHT &&
+                car.y + CAR_HEIGHT > obstacle.y;
+        }
+
+        // ---------- حلقه‌ی اصلی بازی ----------
+        function gameLoop() {
+            if (!gameOver) {
+                // ------ حرکت ماشین ------
+                if (keys.ArrowLeft && carX > 10) {
+                    carX -= 6;
+                }
+                if (keys.ArrowRight && carX < canvas.width - CAR_WIDTH - 10) {
+                    carX += 6;
+                }
+
+                // ------ تولید مانع ------
+                if (frame % 50 === 0) {
+                    spawnObstacle();
+                }
+
+                // ------ حرکت موانع و برخورد ------
+                const car = { x: carX, y: canvas.height - CAR_HEIGHT - 20 };
+
+                for (let i = obstacles.length - 1; i >= 0; i--) {
+                    const obs = obstacles[i];
+                    obs.y += speed;
+
+                    // برخورد
+                    if (checkCollision(car, obs)) {
+                        gameOver = true;
+                    }
+
+                    // امتیاز (وقتی مانع از پایین رد شد)
+                    if (obs.y > canvas.height + 20) {
+                        obstacles.splice(i, 1);
+                        score++;
+                        updateScore();
+                        // افزایش سرعت هر ۱۰ امتیاز
+                        if (score % 10 === 0) {
+                            speed += 0.5;
+                        }
+                    }
+                }
+
+                // ------ برخورد با لبه‌های جاده (جریمه) ------
+                if (carX < 5 || carX + CAR_WIDTH > canvas.width - 5) {
+                    gameOver = true;
+                }
+
+                frame++;
+            }
+
+            // ------ رندر ------
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ---------- رسم صحنه ----------
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // ------ جاده ------
+            // آسفالت
+            ctx.fillStyle = '#2a2a3e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // خط‌های جاده
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.setLineDash([30, 20]);
+            roadOffset = (roadOffset + speed) % 50;
+
+            for (let i = 0; i < LANE_COUNT - 1; i++) {
+                const x = (i + 1) * LANE_WIDTH;
+                ctx.beginPath();
+                ctx.moveTo(x, -roadOffset);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // خطوط کناری
+            ctx.strokeStyle = '#ffd700';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(2, 0);
+            ctx.lineTo(2, canvas.height);
+            ctx.moveTo(canvas.width - 2, 0);
+            ctx.lineTo(canvas.width - 2, canvas.height);
+            ctx.stroke();
+
+            // ------ ماشین بازیکن ------
+            // بدنه
+            ctx.shadowColor = '#00ff88';
+            ctx.shadowBlur = 20;
+            ctx.fillStyle = '#ff3333';
+            ctx.beginPath();
+            ctx.roundRect(carX, canvas.height - CAR_HEIGHT - 20, CAR_WIDTH, CAR_HEIGHT, 12);
+            ctx.fill();
+
+            // شیشه
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#88ddff';
+            ctx.beginPath();
+            ctx.roundRect(carX + 8, canvas.height - CAR_HEIGHT - 15, 12, 18, 4);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.roundRect(carX + CAR_WIDTH - 20, canvas.height - CAR_HEIGHT - 15, 12, 18, 4);
+            ctx.fill();
+
+            // چراغ‌ها
+            ctx.fillStyle = '#ffdd00';
+            ctx.beginPath();
+            ctx.arc(carX + 8, canvas.height - CAR_HEIGHT - 22, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(carX + CAR_WIDTH - 8, canvas.height - CAR_HEIGHT - 22, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // چراغ عقب
+            ctx.fillStyle = '#ff4400';
+            ctx.beginPath();
+            ctx.arc(carX + 10, canvas.height - 12, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(carX + CAR_WIDTH - 10, canvas.height - 12, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.shadowBlur = 0;
+
+            // ------ موانع (ماشین‌های حریف) ------
+            for (const obs of obstacles) {
+                // بدنه
+                ctx.shadowColor = '#ff4444';
+                ctx.shadowBlur = 15;
+                ctx.fillStyle = '#3399ff';
+                ctx.beginPath();
+                ctx.roundRect(obs.x, obs.y, OBSTACLE_WIDTH, OBSTACLE_HEIGHT, 10);
+                ctx.fill();
+
+                // شیشه
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#aaddff';
+                ctx.beginPath();
+                ctx.roundRect(obs.x + 6, obs.y + 8, 10, 14, 3);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.roundRect(obs.x + OBSTACLE_WIDTH - 16, obs.y + 8, 10, 14, 3);
+                ctx.fill();
+
+                // چراغ‌ها
+                ctx.fillStyle = '#ffdd00';
+                ctx.beginPath();
+                ctx.arc(obs.x + 8, obs.y + 6, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(obs.x + OBSTACLE_WIDTH - 8, obs.y + 6, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+
+            // ------ Game Over ------
+            if (gameOver) {
+                ctx.fillStyle = '#000000bb';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ff2255';
+                ctx.font = 'bold 46px Arial';
+                ctx.textAlign = 'center';
+                ctx.shadowColor = '#ff2255';
+                ctx.shadowBlur = 30;
+                ctx.fillText('💥 GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '22px Arial';
+                ctx.shadowBlur = 0;
+                ctx.fillText(`امتیاز نهایی: ${score}`, canvas.width / 2, canvas.height / 2 + 50);
+
+                ctx.fillStyle = '#aaa';
+                ctx.font = '18px Arial';
+                ctx.fillText('按下 ESC  برای شروع مجدد', canvas.width / 2, canvas.height / 2 + 100);
+                ctx.shadowBlur = 0;
+            }
+
+            // ------ نمایش سرعت (همین پایین) ------
+            ctx.fillStyle = '#88ff88';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(`سرعت: ${Math.round(speed * 10)} کیلومتر بر ساعت`, 10, 25);
+        }
+
+        // پشتیبانی از roundRect
+        CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+            if (r > w / 2) r = w / 2;
+            if (r > h / 2) r = h / 2;
+            this.moveTo(x + r, y);
+            this.lineTo(x + w - r, y);
+            this.quadraticCurveTo(x + w, y, x + w, y + r);
+            this.lineTo(x + w, y + h - r);
+            this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            this.lineTo(x + r, y + h);
+            this.quadraticCurveTo(x, y + h, x, y + h - r);
+            this.lineTo(x, y + r);
+            this.quadraticCurveTo(x, y, x + r, y);
+            this.closePath();
+            return this;
+        };
+
+        // ---------- شروع بازی ----------
+        resetGame();
+        gameLoop();
+    </script>
+</body>
+</html>
