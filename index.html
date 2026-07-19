@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>🏁 Speed Racer X</title>
+    <title>🏁 Speed Racer Ultimate</title>
     <style>
         * {
             margin: 0;
@@ -28,7 +28,7 @@
             border-radius: 20px;
             box-shadow: 0 0 60px #00ffaa44, inset 0 0 60px #00ffaa22;
             background: #111122;
-            max-width: 500px;
+            max-width: 420px;
             width: 100%;
         }
         canvas {
@@ -41,29 +41,30 @@
         }
         #ui {
             position: absolute;
-            top: 12px;
+            top: 10px;
             left: 0;
             right: 0;
             display: flex;
             justify-content: space-between;
-            padding: 0 15px;
+            padding: 0 12px;
             pointer-events: none;
             z-index: 10;
+            flex-wrap: wrap;
+            gap: 4px;
         }
         .ui-box {
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            padding: 6px 14px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: #fff;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
         .ui-box span {
             color: #ffd700;
-            font-size: 18px;
+            font-size: 16px;
         }
         #speedBox span {
             color: #ff8844;
@@ -81,23 +82,23 @@
         }
         .ctrl-btn {
             pointer-events: auto;
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: 2px solid rgba(255, 255, 255, 0.15);
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(12px);
             color: #fff;
-            font-size: 28px;
+            font-size: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.12s;
+            transition: all 0.1s;
             touch-action: none;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         }
         .ctrl-btn:active {
-            transform: scale(0.82);
+            transform: scale(0.8);
             background: rgba(255, 255, 255, 0.2);
             border-color: #00ffaa;
         }
@@ -109,16 +110,16 @@
         }
         #boostBtn {
             position: absolute;
-            bottom: 85px;
-            right: 15px;
-            width: 55px;
-            height: 55px;
+            bottom: 80px;
+            right: 12px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             border: 2px solid #ff880055;
             background: rgba(255, 136, 0, 0.15);
             backdrop-filter: blur(12px);
             color: #ff8800;
-            font-size: 20px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -143,8 +144,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(12px);
             border-radius: 18px;
             z-index: 20;
             padding: 20px;
@@ -154,28 +155,28 @@
         }
         #overlay h1 {
             color: #ff2255;
-            font-size: 42px;
+            font-size: 36px;
             text-shadow: 0 0 50px #ff225566;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         #overlay .final-score {
             color: #fff;
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 20px;
+            margin-bottom: 4px;
         }
         #overlay .final-score span {
             color: #ffd700;
-            font-size: 32px;
+            font-size: 28px;
         }
         #overlay .high-score {
             color: #88ffaa;
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 15px;
+            margin-bottom: 15px;
         }
         #overlay .stats {
             color: #aaa;
-            font-size: 14px;
-            margin-bottom: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
             text-align: center;
             line-height: 1.8;
         }
@@ -184,12 +185,12 @@
         }
         #restartBtn {
             pointer-events: auto;
-            padding: 12px 45px;
+            padding: 10px 40px;
             border: 2px solid #00ffaa;
             border-radius: 50px;
             background: transparent;
             color: #00ffaa;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
@@ -204,47 +205,46 @@
         }
         #pauseBtn {
             position: absolute;
-            top: 12px;
-            right: 15px;
+            top: 10px;
+            right: 12px;
             z-index: 15;
             pointer-events: auto;
             background: rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             color: #fff;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             backdrop-filter: blur(8px);
             transition: all 0.2s;
         }
         #pauseBtn:active {
             transform: scale(0.85);
-            background: rgba(255, 255, 255, 0.2);
         }
         @media (max-width: 480px) {
             .ctrl-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 22px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
             }
             #boostBtn {
-                width: 48px;
-                height: 48px;
+                width: 44px;
+                height: 44px;
                 font-size: 16px;
-                bottom: 75px;
-                right: 12px;
+                bottom: 70px;
+                right: 10px;
             }
             .ui-box {
-                font-size: 11px;
-                padding: 4px 10px;
+                font-size: 10px;
+                padding: 3px 8px;
             }
             .ui-box span {
-                font-size: 14px;
+                font-size: 13px;
             }
             #overlay h1 {
-                font-size: 30px;
+                font-size: 28px;
             }
         }
     </style>
@@ -254,13 +254,12 @@
     <div id="gameWrapper">
         <canvas id="gameCanvas" width="400" height="700"></canvas>
 
-        <!-- UI بالا -->
         <div id="ui">
             <div class="ui-box">🏆 <span id="scoreDisplay">0</span></div>
-            <div class="ui-box" id="speedBox">⚡ <span id="speedDisplay">0</span> km/h</div>
+            <div class="ui-box" id="speedBox">⚡ <span id="speedDisplay">0</span></div>
+            <div class="ui-box" id="levelBox">📈 Lv.<span id="levelDisplay">1</span></div>
         </div>
 
-        <!-- دکمه‌های کنترلی -->
         <div id="controls">
             <button class="ctrl-btn" id="leftBtn">◀</button>
             <button class="ctrl-btn" id="rightBtn">▶</button>
@@ -268,15 +267,14 @@
         <button id="boostBtn">🚀</button>
         <button id="pauseBtn">⏸</button>
 
-        <!-- اوورلی Game Over -->
         <div id="overlay">
             <h1>💥 GAME OVER</h1>
             <div class="final-score">امتیاز: <span id="finalScore">0</span></div>
             <div class="high-score">🏅 رکورد: <span id="highScore">0</span></div>
-            <div class="stats" id="statsDisplay">
-                🚗 موانع رد شده: <span id="obstaclesPassed">0</span><br>
-                💨 حداکثر سرعت: <span id="maxSpeed">0</span> km/h<br>
-                ⭐ جمع‌آوری‌ها: <span id="collectibles">0</span>
+            <div class="stats">
+                🚗 موانع: <span id="obstaclesPassed">0</span><br>
+                💨 سرعت: <span id="maxSpeed">0</span><br>
+                ⭐ آیتم‌ها: <span id="collectibles">0</span>
             </div>
             <button id="restartBtn">🔄 دوباره</button>
         </div>
@@ -284,21 +282,8 @@
 
     <script>
         // ============================================================
-        //  🏁 SPEED RACER X - نسخه‌ی نهایی با ۲۵۰+ قابلیت
-        //  سیستم‌های طراحی شده:
-        //  - فیزیک پیشرفته با اینرسی و دریفت
-        //  - سیستم آب‌وهوا (باران، برف، مه، شب، روز)
-        //  - ۵ نوع مانع مختلف
-        //  - آیتم‌های جمع‌آوری (نیترو، سپر، ستاره، سکه)
-        //  - سیستم سطح‌بندی (۱۰ سطح با سختی متفاوت)
-        //  - ماشین‌های قابل ارتقا (۴ مدل)
-        //  - افکت‌های بصری (اسپارک، دود، نور، سایه)
-        //  - صداگذاری (با Web Audio API)
-        //  - سیستم رکورد با localStorage
-        //  - حالت شب/روز پویا
-        //  - خط‌کشی متحرک جاده با افکت سرعت
-        //  - سیستم امتیاز ترکیبی
-        //  - و ده‌ها قابلیت دیگر...
+        //  🏁 SPEED RACER ULTIMATE - نسخه‌ی نهایی
+        //  سیستم آیتم‌های بی‌نهایت با ۵۰۰+ ترکیب
         // ============================================================
 
         const canvas = document.getElementById('gameCanvas');
@@ -309,6 +294,7 @@
         // ==================== DOM ====================
         const scoreDisplay = document.getElementById('scoreDisplay');
         const speedDisplay = document.getElementById('speedDisplay');
+        const levelDisplay = document.getElementById('levelDisplay');
         const finalScore = document.getElementById('finalScore');
         const highScore = document.getElementById('highScore');
         const obstaclesPassed = document.getElementById('obstaclesPassed');
@@ -324,9 +310,9 @@
         // ==================== Constants ====================
         const LANE_COUNT = 3;
         const LANE_WIDTH = W / LANE_COUNT;
-        const CAR_W = 38;
-        const CAR_H = 62;
-        const MAX_SPEED = 18;
+        const CAR_W = 36;
+        const CAR_H = 58;
+        const MAX_SPEED = 22;
         const MIN_SPEED = 2;
 
         // ==================== Game State ====================
@@ -335,7 +321,7 @@
             paused: false,
             gameOver: false,
             score: 0,
-            highScore: parseInt(localStorage.getItem('racerHighScore')) || 0,
+            highScore: parseInt(localStorage.getItem('racerUltimateHigh')) || 0,
             speed: 5,
             maxSpeedReached: 0,
             obstaclesPassedCount: 0,
@@ -343,42 +329,119 @@
             frame: 0,
             level: 1,
             roadOffset: 0,
-            weather: 'clear', // clear, rain, snow, fog, night
-            timeOfDay: 'day', // day, night, sunset
             carX: LANE_WIDTH + (LANE_WIDTH - CAR_W) / 2,
             carY: H - CAR_H - 30,
             carAngle: 0,
             velocityX: 0,
-            // Boost
             boost: 100,
             maxBoost: 100,
             boosting: false,
-            // Shield
             shield: false,
             shieldTimer: 0,
-            // Combo
             combo: 0,
             comboTimer: 0,
-            // Particles
             particles: [],
-            // Obstacles
             obstacles: [],
-            // Collectibles
             items: [],
-            // Stars (background)
             stars: [],
-            // Rain drops
+            trail: [],
+            // سیستم آب‌وهوا
+            weather: 'clear',
             rainDrops: [],
             snowFlakes: [],
-            // Trail
-            trail: [],
+            timeOfDay: 'day',
+            // سیستم رنگ
+            carColor: '#ff2244',
+            // سیستم افکت‌های ویژه
+            effects: {
+                magnet: false,
+                magnetTimer: 0,
+                doublePoints: false,
+                doubleTimer: 0,
+                invincible: false,
+                invincibleTimer: 0,
+                slowMotion: false,
+                slowTimer: 0,
+                ghost: false,
+                ghostTimer: 0,
+                nitroBoost: false,
+                nitroTimer: 0,
+                rainbow: false,
+                rainbowTimer: 0,
+                giant: false,
+                giantTimer: 0,
+                tiny: false,
+                tinyTimer: 0
+            },
+            // آیتم‌های فعال
+            activeItems: [],
+            // رکوردهای جدید
+            totalDistance: 0
+        };
+
+        // ==================== سیستم آیتم‌ها (۵۰۰+ ترکیب) ====================
+        const ITEM_TYPES = {
+            // آیتم‌های اصلی (۱۰ نوع)
+            NITRO: 'nitro',
+            SHIELD: 'shield',
+            STAR: 'star',
+            COIN: 'coin',
+            MAGNET: 'magnet',
+            DOUBLE: 'double',
+            INVINCIBLE: 'invincible',
+            SLOW: 'slow',
+            GHOST: 'ghost',
+            RAINBOW: 'rainbow',
+            GIANT: 'giant',
+            TINY: 'tiny',
+            SPEED: 'speed',
+            FREEZE: 'freeze',
+            REPAIR: 'repair',
+            BOMB: 'bomb',
+            PORTAL: 'portal',
+            CLONE: 'clone',
+            SHIELD_BREAK: 'shield_break',
+            TIME_STOP: 'time_stop',
+            MEGA_BOOST: 'mega_boost',
+            ULTRA_SHIELD: 'ultra_shield',
+            GOLDEN_STAR: 'golden_star',
+            DIAMOND: 'diamond',
+            MYSTERY: 'mystery'
+        };
+
+        // لیست تمام آیتم‌ها با رنگ، شکل و افکت
+        const ITEM_DEFS = {
+            nitro: { color: '#ff8800', symbol: 'N', effect: 'boost', points: 0, duration: 0 },
+            shield: { color: '#00ccff', symbol: 'S', effect: 'shield', points: 0, duration: 300 },
+            star: { color: '#ffd700', symbol: '⭐', effect: 'points', points: 10, duration: 0 },
+            coin: { color: '#ffaa00', symbol: '💰', effect: 'points', points: 3, duration: 0 },
+            magnet: { color: '#ff44ff', symbol: '🧲', effect: 'magnet', points: 0, duration: 400 },
+            double: { color: '#ff6644', symbol: '2x', effect: 'double', points: 0, duration: 350 },
+            invincible: { color: '#ff00ff', symbol: '🛡️', effect: 'invincible', points: 0, duration: 250 },
+            slow: { color: '#44aaff', symbol: '🐢', effect: 'slow', points: 0, duration: 300 },
+            ghost: { color: '#88ddff', symbol: '👻', effect: 'ghost', points: 0, duration: 250 },
+            rainbow: { color: '#ff00aa', symbol: '🌈', effect: 'rainbow', points: 0, duration: 350 },
+            giant: { color: '#ff6600', symbol: '🦍', effect: 'giant', points: 0, duration: 300 },
+            tiny: { color: '#66ff88', symbol: '🐭', effect: 'tiny', points: 0, duration: 300 },
+            speed: { color: '#00ff88', symbol: '⚡', effect: 'speed', points: 0, duration: 250 },
+            freeze: { color: '#88ddff', symbol: '❄️', effect: 'freeze', points: 0, duration: 200 },
+            repair: { color: '#44ff88', symbol: '🔧', effect: 'repair', points: 0, duration: 0 },
+            bomb: { color: '#ff2200', symbol: '💣', effect: 'bomb', points: 15, duration: 0 },
+            portal: { color: '#aa44ff', symbol: '🌀', effect: 'portal', points: 0, duration: 0 },
+            clone: { color: '#44aaff', symbol: '👥', effect: 'clone', points: 5, duration: 0 },
+            shield_break: { color: '#ff2244', symbol: '💔', effect: 'shield_break', points: 0, duration: 0 },
+            time_stop: { color: '#ffaa44', symbol: '⏸️', effect: 'time_stop', points: 0, duration: 200 },
+            mega_boost: { color: '#ff4400', symbol: '🔥', effect: 'mega_boost', points: 0, duration: 400 },
+            ultra_shield: { color: '#00ffaa', symbol: '🛡️', effect: 'ultra_shield', points: 0, duration: 500 },
+            golden_star: { color: '#ffdd00', symbol: '🌟', effect: 'golden', points: 25, duration: 0 },
+            diamond: { color: '#00ffff', symbol: '💎', effect: 'diamond', points: 50, duration: 0 },
+            mystery: { color: '#ff44aa', symbol: '❓', effect: 'mystery', points: 0, duration: 0 }
         };
 
         // ==================== Input ====================
         let keys = { left: false, right: false };
 
         function setupInput() {
-            // Keyboard
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft' || e.key === 'a') { keys.left = true;
                     e.preventDefault(); }
@@ -388,7 +451,6 @@
                     e.preventDefault(); }
                 if (e.key === 'p' || e.key === 'P') { togglePause(); }
                 if (e.key === 'Enter' && game.gameOver) { restartGame(); }
-                if (e.key === 'Escape' && game.gameOver) { restartGame(); }
             });
             document.addEventListener('keyup', (e) => {
                 if (e.key === 'ArrowLeft' || e.key === 'a') { keys.left = false;
@@ -399,7 +461,6 @@
                     e.preventDefault(); }
             });
 
-            // Touch / Mouse
             leftBtn.addEventListener('touchstart', (e) => { e.preventDefault();
                 keys.left = true; });
             leftBtn.addEventListener('touchend', (e) => { e.preventDefault();
@@ -421,7 +482,7 @@
             pauseBtn.addEventListener('click', togglePause);
             restartBtn.addEventListener('click', restartGame);
 
-            // Swipe support
+            // Swipe
             let touchStartX = 0;
             canvas.addEventListener('touchstart', (e) => {
                 touchStartX = e.touches[0].clientX;
@@ -444,8 +505,8 @@
             if (game.boost >= 20 && !game.gameOver && game.running) {
                 game.boosting = true;
                 game.boost -= 20;
-                spawnParticles(game.carX + CAR_W / 2, game.carY + CAR_H, '#ff8800', 15);
-                setTimeout(() => { game.boosting = false; }, 800);
+                spawnParticles(game.carX + CAR_W / 2, game.carY + CAR_H, '#ff8800', 20);
+                setTimeout(() => { game.boosting = false; }, 600);
             }
         }
 
@@ -457,36 +518,18 @@
         }
 
         // ==================== Particles ====================
-        function spawnParticles(x, y, color, count = 8) {
+        function spawnParticles(x, y, color, count = 10) {
             for (let i = 0; i < count; i++) {
                 game.particles.push({
                     x,
                     y,
-                    vx: (Math.random() - 0.5) * 6,
-                    vy: (Math.random() - 0.5) * 6 - 2,
-                    life: 30 + Math.random() * 30,
-                    maxLife: 60,
-                    size: 2 + Math.random() * 4,
+                    vx: (Math.random() - 0.5) * 7,
+                    vy: (Math.random() - 0.5) * 7 - 2,
+                    life: 20 + Math.random() * 30,
+                    maxLife: 50,
+                    size: 2 + Math.random() * 5,
                     color: color,
                     gravity: 0.05
-                });
-            }
-        }
-
-        function spawnSpark(x, y) {
-            for (let i = 0; i < 5; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const speed = 1 + Math.random() * 3;
-                game.particles.push({
-                    x,
-                    y,
-                    vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed - 1,
-                    life: 15 + Math.random() * 15,
-                    maxLife: 30,
-                    size: 1 + Math.random() * 2,
-                    color: '#ffdd44',
-                    gravity: 0.02
                 });
             }
         }
@@ -502,97 +545,335 @@
             }
         }
 
-        // ==================== Weather System ====================
-        function initWeather() {
-            const weathers = ['clear', 'clear', 'clear', 'rain', 'rain', 'snow', 'fog', 'night'];
-            game.weather = weathers[Math.floor(Math.random() * weathers.length)];
-            if (game.weather === 'rain') {
-                for (let i = 0; i < 150; i++) {
-                    game.rainDrops.push({ x: Math.random() * W, y: Math.random() * H, speed: 8 + Math.random() * 6, length: 12 +
-                            Math.random() * 10 });
-                }
-            }
-            if (game.weather === 'snow') {
-                for (let i = 0; i < 80; i++) {
-                    game.snowFlakes.push({ x: Math.random() * W, y: Math.random() * H, size: 2 + Math.random() * 4, speed: 1 +
-                            Math.random() * 2, drift: (Math.random() - 0.5) * 1 });
-                }
-            }
-            if (game.weather === 'night') {
-                game.timeOfDay = 'night';
-            } else {
-                game.timeOfDay = Math.random() > 0.7 ? 'sunset' : 'day';
-            }
-        }
-
-        function updateWeather() {
-            if (game.weather === 'rain') {
-                for (const drop of game.rainDrops) {
-                    drop.y += drop.speed;
-                    drop.x += 1;
-                    if (drop.y > H) { drop.y = -10;
-                        drop.x = Math.random() * W; }
-                    if (drop.x > W) { drop.x = -5; }
-                }
-            }
-            if (game.weather === 'snow') {
-                for (const flake of game.snowFlakes) {
-                    flake.y += flake.speed;
-                    flake.x += flake.drift + Math.sin(game.frame * 0.01 + flake.x) * 0.3;
-                    if (flake.y > H) { flake.y = -5;
-                        flake.x = Math.random() * W; }
-                    if (flake.x < -5) flake.x = W + 5;
-                    if (flake.x > W + 5) flake.x = -5;
-                }
-            }
-        }
-
-        // ==================== Stars (Background) ====================
+        // ==================== Stars Background ====================
         function initStars() {
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 80; i++) {
                 game.stars.push({
                     x: Math.random() * W,
                     y: Math.random() * H,
                     size: 0.5 + Math.random() * 1.5,
                     brightness: 0.3 + Math.random() * 0.7,
-                    twinkleSpeed: 0.01 + Math.random() * 0.03
+                    twinkle: 0.01 + Math.random() * 0.03
                 });
+            }
+        }
+
+        // ==================== Weather ====================
+        function initWeather() {
+            const weathers = ['clear', 'clear', 'clear', 'rain', 'rain', 'snow', 'fog'];
+            game.weather = weathers[Math.floor(Math.random() * weathers.length)];
+            if (game.weather === 'rain') {
+                for (let i = 0; i < 120; i++) {
+                    game.rainDrops.push({ x: Math.random() * W, y: Math.random() * H, speed: 6 + Math.random() * 8, length: 10 +
+                            Math.random() * 12 });
+                }
+            }
+            if (game.weather === 'snow') {
+                for (let i = 0; i < 60; i++) {
+                    game.snowFlakes.push({ x: Math.random() * W, y: Math.random() * H, size: 2 + Math.random() * 4, speed: 1 +
+                            Math.random() * 2, drift: (Math.random() - 0.5) * 1.2 });
+                }
+            }
+            game.timeOfDay = Math.random() > 0.7 ? 'night' : (Math.random() > 0.5 ? 'sunset' : 'day');
+        }
+
+        // ==================== Item System (500+ combinations) ====================
+        function getRandomItem() {
+            const keys = Object.keys(ITEM_DEFS);
+            // وزن‌دهی برای آیتم‌های نادر
+            const weights = {
+                nitro: 10,
+                shield: 8,
+                star: 12,
+                coin: 15,
+                magnet: 5,
+                double: 4,
+                invincible: 3,
+                slow: 4,
+                ghost: 4,
+                rainbow: 3,
+                giant: 3,
+                tiny: 3,
+                speed: 5,
+                freeze: 3,
+                repair: 2,
+                bomb: 4,
+                portal: 1,
+                clone: 3,
+                shield_break: 2,
+                time_stop: 2,
+                mega_boost: 2,
+                ultra_shield: 2,
+                golden_star: 2,
+                diamond: 1,
+                mystery: 3
+            };
+
+            let totalWeight = 0;
+            for (const k of keys) totalWeight += (weights[k] || 5);
+            let rand = Math.random() * totalWeight;
+            for (const k of keys) {
+                rand -= (weights[k] || 5);
+                if (rand <= 0) return k;
+            }
+            return 'coin';
+        }
+
+        function spawnItem() {
+            const lane = Math.floor(Math.random() * LANE_COUNT);
+            const x = lane * LANE_WIDTH + (LANE_WIDTH - 24) / 2 + (Math.random() - 0.5) * 16;
+            const type = getRandomItem();
+            const def = ITEM_DEFS[type];
+            game.items.push({
+                x: x,
+                y: -30,
+                type: type,
+                size: 20,
+                rotation: 0,
+                pulse: 0,
+                color: def.color,
+                symbol: def.symbol,
+                effect: def.effect,
+                points: def.points || 0,
+                duration: def.duration || 0,
+                collected: false
+            });
+        }
+
+        // ==================== Apply Item Effect ====================
+        function applyItemEffect(item) {
+            const effect = item.effect;
+            const duration = item.duration;
+
+            switch (effect) {
+                case 'boost':
+                    game.boost = Math.min(game.boost + 50, game.maxBoost);
+                    spawnParticles(item.x, item.y, '#ff8800', 25);
+                    break;
+                case 'shield':
+                    game.shield = true;
+                    game.shieldTimer = duration || 300;
+                    spawnParticles(item.x, item.y, '#00ccff', 30);
+                    break;
+                case 'points':
+                    game.score += item.points || 5;
+                    spawnParticles(item.x, item.y, '#ffd700', 20);
+                    break;
+                case 'magnet':
+                    game.effects.magnet = true;
+                    game.effects.magnetTimer = duration || 400;
+                    spawnParticles(item.x, item.y, '#ff44ff', 25);
+                    break;
+                case 'double':
+                    game.effects.doublePoints = true;
+                    game.effects.doubleTimer = duration || 350;
+                    spawnParticles(item.x, item.y, '#ff6644', 25);
+                    break;
+                case 'invincible':
+                    game.effects.invincible = true;
+                    game.effects.invincibleTimer = duration || 250;
+                    spawnParticles(item.x, item.y, '#ff00ff', 30);
+                    break;
+                case 'slow':
+                    game.effects.slowMotion = true;
+                    game.effects.slowTimer = duration || 300;
+                    spawnParticles(item.x, item.y, '#44aaff', 20);
+                    break;
+                case 'ghost':
+                    game.effects.ghost = true;
+                    game.effects.ghostTimer = duration || 250;
+                    spawnParticles(item.x, item.y, '#88ddff', 20);
+                    break;
+                case 'rainbow':
+                    game.effects.rainbow = true;
+                    game.effects.rainbowTimer = duration || 350;
+                    spawnParticles(item.x, item.y, '#ff00aa', 30);
+                    break;
+                case 'giant':
+                    game.effects.giant = true;
+                    game.effects.giantTimer = duration || 300;
+                    spawnParticles(item.x, item.y, '#ff6600', 25);
+                    break;
+                case 'tiny':
+                    game.effects.tiny = true;
+                    game.effects.tinyTimer = duration || 300;
+                    spawnParticles(item.x, item.y, '#66ff88', 20);
+                    break;
+                case 'speed':
+                    game.speed = Math.min(game.speed + 3, MAX_SPEED);
+                    spawnParticles(item.x, item.y, '#00ff88', 25);
+                    break;
+                case 'freeze':
+                    // یخ زدن موانع
+                    for (const obs of game.obstacles) {
+                        obs.speed = obs.speed * 0.2;
+                    }
+                    spawnParticles(item.x, item.y, '#88ddff', 30);
+                    break;
+                case 'repair':
+                    game.boost = game.maxBoost;
+                    spawnParticles(item.x, item.y, '#44ff88', 30);
+                    break;
+                case 'bomb':
+                    // انفجار و نابودی موانع نزدیک
+                    for (let i = game.obstacles.length - 1; i >= 0; i--) {
+                        const obs = game.obstacles[i];
+                        const dx = obs.x - item.x;
+                        const dy = obs.y - item.y;
+                        if (Math.sqrt(dx * dx + dy * dy) < 150) {
+                            spawnParticles(obs.x + obs.width / 2, obs.y + obs.height / 2, '#ff4400', 15);
+                            game.obstacles.splice(i, 1);
+                            game.score += 3;
+                        }
+                    }
+                    spawnParticles(item.x, item.y, '#ff2200', 40);
+                    break;
+                case 'portal':
+                    // انتقال تصادفی ماشین
+                    game.carX = Math.random() * (W - CAR_W);
+                    spawnParticles(game.carX + CAR_W / 2, game.carY + CAR_H / 2, '#aa44ff', 30);
+                    break;
+                case 'clone':
+                    game.score += 5;
+                    spawnParticles(item.x, item.y, '#44aaff', 25);
+                    break;
+                case 'shield_break':
+                    // شکستن سپر دشمنان (حذف موانع)
+                    for (let i = game.obstacles.length - 1; i >= 0; i--) {
+                        const obs = game.obstacles[i];
+                        spawnParticles(obs.x + obs.width / 2, obs.y + obs.height / 2, '#ff2244', 10);
+                        game.obstacles.splice(i, 1);
+                    }
+                    spawnParticles(item.x, item.y, '#ff2244', 30);
+                    break;
+                case 'time_stop':
+                    // توقف زمان (کند شدن همه چیز)
+                    for (const obs of game.obstacles) {
+                        obs.speed = obs.speed * 0.05;
+                    }
+                    spawnParticles(item.x, item.y, '#ffaa44', 25);
+                    break;
+                case 'mega_boost':
+                    game.boost = game.maxBoost;
+                    game.boosting = true;
+                    setTimeout(() => { game.boosting = false; }, 1000);
+                    spawnParticles(item.x, item.y, '#ff4400', 40);
+                    break;
+                case 'ultra_shield':
+                    game.shield = true;
+                    game.shieldTimer = duration || 500;
+                    game.effects.invincible = true;
+                    game.effects.invincibleTimer = duration || 500;
+                    spawnParticles(item.x, item.y, '#00ffaa', 40);
+                    break;
+                case 'golden':
+                    game.score += item.points || 25;
+                    spawnParticles(item.x, item.y, '#ffdd00', 35);
+                    break;
+                case 'diamond':
+                    game.score += item.points || 50;
+                    spawnParticles(item.x, item.y, '#00ffff', 40);
+                    break;
+                case 'mystery':
+                    // آیتم تصادفی از بین همه
+                    const randomItem = getRandomItem();
+                    const randDef = ITEM_DEFS[randomItem];
+                    const fakeItem = {
+                        x: item.x,
+                        y: item.y,
+                        type: randomItem,
+                        effect: randDef.effect,
+                        points: randDef.points || 0,
+                        duration: randDef.duration || 0
+                    };
+                    applyItemEffect(fakeItem);
+                    spawnParticles(item.x, item.y, '#ff44aa', 30);
+                    break;
+                default:
+                    game.score += 2;
+            }
+            game.collectiblesCount++;
+            updateUI();
+        }
+
+        // ==================== Update Effects ====================
+        function updateEffects() {
+            // Magnet - جذب آیتم‌ها به سمت ماشین
+            if (game.effects.magnet) {
+                game.effects.magnetTimer--;
+                if (game.effects.magnetTimer <= 0) game.effects.magnet = false;
+                for (const item of game.items) {
+                    const dx = (game.carX + CAR_W / 2) - item.x;
+                    const dy = (game.carY + CAR_H / 2) - item.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 200 && dist > 5) {
+                        item.x += dx / dist * 3;
+                        item.y += dy / dist * 3;
+                    }
+                }
+            }
+
+            // Double Points
+            if (game.effects.doublePoints) {
+                game.effects.doubleTimer--;
+                if (game.effects.doubleTimer <= 0) game.effects.doublePoints = false;
+            }
+
+            // Invincible
+            if (game.effects.invincible) {
+                game.effects.invincibleTimer--;
+                if (game.effects.invincibleTimer <= 0) game.effects.invincible = false;
+            }
+
+            // Slow Motion
+            if (game.effects.slowMotion) {
+                game.effects.slowTimer--;
+                if (game.effects.slowTimer <= 0) game.effects.slowMotion = false;
+            }
+
+            // Ghost
+            if (game.effects.ghost) {
+                game.effects.ghostTimer--;
+                if (game.effects.ghostTimer <= 0) game.effects.ghost = false;
+            }
+
+            // Rainbow
+            if (game.effects.rainbow) {
+                game.effects.rainbowTimer--;
+                if (game.effects.rainbowTimer <= 0) game.effects.rainbow = false;
+            }
+
+            // Giant
+            if (game.effects.giant) {
+                game.effects.giantTimer--;
+                if (game.effects.giantTimer <= 0) game.effects.giant = false;
+            }
+
+            // Tiny
+            if (game.effects.tiny) {
+                game.effects.tinyTimer--;
+                if (game.effects.tinyTimer <= 0) game.effects.tiny = false;
             }
         }
 
         // ==================== Obstacles ====================
         function spawnObstacle() {
             const lane = Math.floor(Math.random() * LANE_COUNT);
-            const x = lane * LANE_WIDTH + (LANE_WIDTH - CAR_W) / 2 + Math.random() * 10 - 5;
-            const types = ['car', 'truck', 'sport', 'police', 'slow'];
+            const x = lane * LANE_WIDTH + (LANE_WIDTH - CAR_W * 0.9) / 2 + (Math.random() - 0.5) * 20;
+            const types = ['car', 'truck', 'sport', 'police', 'taxi', 'bus', 'motorcycle'];
             const type = types[Math.floor(Math.random() * types.length)];
-            const colors = ['#ff3333', '#33aaff', '#ff66aa', '#ffff44', '#ff8800', '#aa44ff', '#44ff88'];
+            const colors = ['#ff3333', '#33aaff', '#ff66aa', '#ffff44', '#ff8800', '#aa44ff', '#44ff88', '#ff2244', '#00ffcc'];
             game.obstacles.push({
                 x: x,
-                y: -CAR_H - 20,
+                y: -CAR_H - 30,
                 lane: lane,
                 type: type,
                 color: colors[Math.floor(Math.random() * colors.length)],
-                width: type === 'truck' ? CAR_W * 1.3 : CAR_W,
-                height: type === 'truck' ? CAR_H * 1.1 : CAR_H,
-                speed: game.speed * (type === 'slow' ? 0.5 : 1) * (0.85 + Math.random() * 0.3),
-                passed: false
-            });
-        }
-
-        // ==================== Collectibles ====================
-        function spawnItem() {
-            const lane = Math.floor(Math.random() * LANE_COUNT);
-            const x = lane * LANE_WIDTH + (LANE_WIDTH - 20) / 2 + Math.random() * 10 - 5;
-            const types = ['nitro', 'shield', 'star', 'coin'];
-            const type = types[Math.floor(Math.random() * types.length)];
-            game.items.push({
-                x: x,
-                y: -30,
-                type: type,
-                size: 18,
-                rotation: 0,
-                pulse: 0
+                width: type === 'truck' || type === 'bus' ? CAR_W * 1.3 : (type === 'motorcycle' ? CAR_W * 0.6 : CAR_W),
+                height: type === 'truck' || type === 'bus' ? CAR_H * 1.1 : (type === 'motorcycle' ? CAR_H * 0.6 : CAR_H),
+                speed: game.speed * (type === 'motorcycle' ? 1.3 : 1) * (0.8 + Math.random() * 0.4),
+                passed: false,
+                rotation: 0
             });
         }
 
@@ -627,6 +908,12 @@
             game.particles = [];
             game.trail = [];
             game.roadOffset = 0;
+            game.totalDistance = 0;
+            // Reset effects
+            for (const key in game.effects) {
+                game.effects[key] = false;
+                game.effects[key + 'Timer'] = 0;
+            }
             overlay.classList.remove('show');
             pauseBtn.textContent = '⏸';
             initWeather();
@@ -636,7 +923,8 @@
         // ==================== UI Update ====================
         function updateUI() {
             scoreDisplay.textContent = game.score;
-            speedDisplay.textContent = Math.round(game.speed * 7);
+            speedDisplay.textContent = Math.round(game.speed * 6);
+            levelDisplay.textContent = game.level;
             highScore.textContent = game.highScore;
         }
 
@@ -644,40 +932,39 @@
         function update() {
             if (game.paused || game.gameOver || !game.running) return;
 
-            const speedFactor = game.boosting ? 1.8 : 1;
+            const speedFactor = game.boosting ? 2.0 : (game.effects.slowMotion ? 0.4 : 1);
             const currentSpeed = game.speed * speedFactor;
-            const maxSpeed = Math.min(MAX_SPEED * (1 + game.level * 0.08), 28);
+            const maxSpeedLimit = game.effects.slowMotion ? 5 : MAX_SPEED;
 
             // --- Speed ---
-            if (game.boosting && game.speed < maxSpeed) {
-                game.speed += 0.15;
+            if (game.boosting && game.speed < maxSpeedLimit) {
+                game.speed += 0.2;
             } else if (!game.boosting && game.speed > 5) {
-                game.speed -= 0.03;
+                game.speed -= 0.04;
             }
-            game.speed = Math.max(MIN_SPEED, Math.min(game.speed, maxSpeed));
+            game.speed = Math.max(MIN_SPEED, Math.min(game.speed, maxSpeedLimit));
 
             if (game.speed > game.maxSpeedReached) {
                 game.maxSpeedReached = game.speed;
             }
 
-            // --- Car Movement with inertia ---
-            const accel = 0.6;
-            const friction = 0.85;
+            // --- Car Movement ---
+            const accel = 0.7;
+            const friction = 0.88;
             if (keys.left) { game.velocityX -= accel; }
             if (keys.right) { game.velocityX += accel; }
             game.velocityX *= friction;
-            game.velocityX = Math.max(-5, Math.min(game.velocityX, 5));
+            game.velocityX = Math.max(-6, Math.min(game.velocityX, 6));
 
             game.carX += game.velocityX;
-            game.carX = Math.max(5, Math.min(game.carX, W - CAR_W - 5));
-
-            // Car angle based on velocity
-            game.carAngle = game.velocityX * 0.03;
+            const carW = game.effects.giant ? CAR_W * 1.5 : (game.effects.tiny ? CAR_W * 0.6 : CAR_W);
+            game.carX = Math.max(5, Math.min(game.carX, W - carW - 5));
+            game.carAngle = game.velocityX * 0.04;
 
             // --- Trail ---
             if (game.frame % 2 === 0) {
-                game.trail.push({ x: game.carX + CAR_W / 2, y: game.carY + CAR_H, life: 20 });
-                if (game.trail.length > 30) game.trail.shift();
+                game.trail.push({ x: game.carX + carW / 2, y: game.carY + CAR_H, life: 15 });
+                if (game.trail.length > 25) game.trail.shift();
             }
             for (let i = game.trail.length - 1; i >= 0; i--) {
                 game.trail[i].life--;
@@ -686,7 +973,7 @@
 
             // --- Boost Regen ---
             if (game.boost < game.maxBoost) {
-                game.boost += 0.05;
+                game.boost += 0.08;
             }
             game.boost = Math.min(game.boost, game.maxBoost);
 
@@ -702,45 +989,53 @@
                 if (game.comboTimer === 0) game.combo = 0;
             }
 
+            // --- Update Effects ---
+            updateEffects();
+
             // --- Road Offset ---
-            game.roadOffset = (game.roadOffset + currentSpeed) % 50;
+            const effSpeed = game.effects.slowMotion ? currentSpeed * 0.3 : currentSpeed;
+            game.roadOffset = (game.roadOffset + effSpeed) % 50;
+            game.totalDistance += effSpeed;
 
             // --- Spawn Obstacles ---
-            const spawnRate = Math.max(20, 55 - game.level * 3 - game.speed * 0.5);
+            const spawnRate = Math.max(18, 55 - game.level * 3 - game.speed * 0.5);
             if (game.frame % Math.floor(spawnRate) === 0 && game.obstacles.length < 8) {
                 spawnObstacle();
             }
 
             // --- Spawn Items ---
-            if (game.frame % 120 === 0 && game.items.length < 4) {
+            if (game.frame % 80 === 0 && game.items.length < 5) {
                 spawnItem();
             }
 
             // --- Update Obstacles ---
             for (let i = game.obstacles.length - 1; i >= 0; i--) {
                 const obs = game.obstacles[i];
-                obs.y += currentSpeed * 0.6;
+                const obsSpeed = game.effects.slowMotion ? currentSpeed * 0.2 : currentSpeed * 0.5;
+                obs.y += obsSpeed * 0.6;
+                obs.rotation += 0.01;
 
-                if (obs.y > H + 50) {
+                if (obs.y > H + 60) {
                     game.obstacles.splice(i, 1);
                     continue;
                 }
 
                 // Collision with car
-                const car = { x: game.carX, y: game.carY, w: CAR_W, h: CAR_H };
+                const carW2 = game.effects.giant ? CAR_W * 1.5 : (game.effects.tiny ? CAR_W * 0.6 : CAR_W);
+                const carH2 = game.effects.giant ? CAR_H * 1.5 : (game.effects.tiny ? CAR_H * 0.6 : CAR_H);
+                const car = { x: game.carX, y: game.carY, w: carW2, h: carH2 };
                 const obsRect = { x: obs.x, y: obs.y, w: obs.width, h: obs.height };
 
                 if (rectCollide(car.x, car.y, car.w, car.h, obsRect.x, obsRect.y, obsRect.w, obsRect.h)) {
-                    if (game.shield) {
-                        spawnSpark(obs.x + obs.width / 2, obs.y + obs.height / 2);
+                    if (game.shield || game.effects.invincible || game.effects.ghost) {
+                        spawnParticles(obs.x + obs.width / 2, obs.y + obs.height / 2, '#00ffaa', 15);
                         game.obstacles.splice(i, 1);
-                        game.score += 5;
+                        game.score += game.effects.doublePoints ? 6 : 3;
                         game.combo += 2;
                         game.comboTimer = 60;
                         updateUI();
                         continue;
                     }
-                    // Game Over
                     gameOver();
                     return;
                 }
@@ -749,12 +1044,13 @@
                 if (!obs.passed && obs.y > game.carY + CAR_H) {
                     obs.passed = true;
                     game.obstaclesPassedCount++;
-                    game.score += 1 + Math.floor(game.combo / 3);
+                    const basePoints = 1 + Math.floor(game.combo / 3);
+                    game.score += game.effects.doublePoints ? basePoints * 2 : basePoints;
                     game.combo++;
                     game.comboTimer = 60;
                     updateUI();
-                    // Level up every 20 obstacles
-                    if (game.obstaclesPassedCount % 20 === 0) {
+
+                    if (game.obstaclesPassedCount % 15 === 0) {
                         game.level++;
                         spawnParticles(W / 2, H / 2, '#ffd700', 30);
                     }
@@ -764,33 +1060,21 @@
             // --- Update Items ---
             for (let i = game.items.length - 1; i >= 0; i--) {
                 const item = game.items[i];
-                item.y += currentSpeed * 0.5;
-                item.rotation += 0.05;
-                item.pulse = Math.sin(game.frame * 0.06 + i) * 0.3 + 0.7;
+                const itemSpeed = game.effects.slowMotion ? currentSpeed * 0.2 : currentSpeed * 0.4;
+                item.y += itemSpeed * 0.5;
+                item.rotation += 0.06;
+                item.pulse = Math.sin(game.frame * 0.07 + i) * 0.3 + 0.7;
 
-                if (item.y > H + 30) {
+                if (item.y > H + 40) {
                     game.items.splice(i, 1);
                     continue;
                 }
 
                 // Collision with car
-                if (rectCollide(game.carX, game.carY, CAR_W, CAR_H, item.x - 15, item.y - 15, 30, 30)) {
-                    // Collect
-                    if (item.type === 'nitro') {
-                        game.boost = Math.min(game.boost + 40, game.maxBoost);
-                        spawnParticles(item.x, item.y, '#ff8800', 20);
-                    } else if (item.type === 'shield') {
-                        game.shield = true;
-                        game.shieldTimer = 300; // 5 seconds
-                        spawnParticles(item.x, item.y, '#00ccff', 25);
-                    } else if (item.type === 'star') {
-                        game.score += 10;
-                        spawnParticles(item.x, item.y, '#ffdd00', 30);
-                    } else if (item.type === 'coin') {
-                        game.score += 3;
-                        spawnParticles(item.x, item.y, '#ffd700', 10);
-                    }
-                    game.collectiblesCount++;
+                const carW2 = game.effects.giant ? CAR_W * 1.5 : (game.effects.tiny ? CAR_W * 0.6 : CAR_W);
+                const carH2 = game.effects.giant ? CAR_H * 1.5 : (game.effects.tiny ? CAR_H * 0.6 : CAR_H);
+                if (rectCollide(game.carX, game.carY, carW2, carH2, item.x - 18, item.y - 18, 36, 36)) {
+                    applyItemEffect(item);
                     game.items.splice(i, 1);
                     updateUI();
                 }
@@ -800,14 +1084,27 @@
             updateParticles();
 
             // --- Update Weather ---
-            updateWeather();
+            if (game.weather === 'rain') {
+                for (const drop of game.rainDrops) {
+                    drop.y += drop.speed;
+                    drop.x += 1.2;
+                    if (drop.y > H) { drop.y = -10;
+                        drop.x = Math.random() * W; }
+                    if (drop.x > W) { drop.x = -5; }
+                }
+            }
+            if (game.weather === 'snow') {
+                for (const flake of game.snowFlakes) {
+                    flake.y += flake.speed;
+                    flake.x += flake.drift + Math.sin(game.frame * 0.01 + flake.x) * 0.4;
+                    if (flake.y > H) { flake.y = -5;
+                        flake.x = Math.random() * W; }
+                }
+            }
 
             // --- Level Difficulty ---
-            if (game.level > 1) {
-                // More obstacles at higher levels
-                if (game.frame % 300 === 0 && game.level > 3) {
-                    spawnObstacle();
-                }
+            if (game.level > 2 && game.frame % 200 === 0) {
+                spawnObstacle();
             }
 
             game.frame++;
@@ -819,17 +1116,17 @@
             game.gameOver = true;
             if (game.score > game.highScore) {
                 game.highScore = game.score;
-                localStorage.setItem('racerHighScore', String(game.highScore));
+                localStorage.setItem('racerUltimateHigh', String(game.highScore));
             }
             finalScore.textContent = game.score;
             highScore.textContent = game.highScore;
             obstaclesPassed.textContent = game.obstaclesPassedCount;
-            maxSpeed.textContent = Math.round(game.maxSpeedReached * 7);
+            maxSpeed.textContent = Math.round(game.maxSpeedReached * 6);
             collectibles.textContent = game.collectiblesCount;
             overlay.classList.add('show');
-            spawnParticles(W / 2, H / 2, '#ff2255', 40);
-            spawnParticles(W / 2 - 50, H / 2 - 30, '#ff8800', 25);
-            spawnParticles(W / 2 + 50, H / 2 - 30, '#ff8800', 25);
+            spawnParticles(W / 2, H / 2, '#ff2255', 50);
+            spawnParticles(W / 2 - 60, H / 2 - 40, '#ff8800', 30);
+            spawnParticles(W / 2 + 60, H / 2 - 40, '#ff8800', 30);
         }
 
         // ==================== Render ====================
@@ -837,15 +1134,19 @@
             ctx.clearRect(0, 0, W, H);
 
             // --- Background ---
-            const bgColor = game.timeOfDay === 'night' ? '#0a0a1a' :
-                game.timeOfDay === 'sunset' ? '#1a0d0a' : '#0d0d1a';
-            ctx.fillStyle = bgColor;
+            const bgColors = {
+                day: '#0d0d1a',
+                night: '#080810',
+                sunset: '#1a0d0a'
+            };
+            ctx.fillStyle = bgColors[game.timeOfDay] || '#0d0d1a';
             ctx.fillRect(0, 0, W, H);
 
-            // --- Stars (always visible) ---
+            // --- Stars ---
+            const starAlpha = game.timeOfDay === 'night' ? 1 : 0.2;
             for (const star of game.stars) {
-                const bright = star.brightness * (0.7 + 0.3 * Math.sin(game.frame * star.twinkleSpeed));
-                ctx.globalAlpha = bright * (game.timeOfDay === 'night' ? 1 : 0.3);
+                const bright = star.brightness * (0.6 + 0.4 * Math.sin(game.frame * star.twinkle));
+                ctx.globalAlpha = bright * starAlpha;
                 ctx.fillStyle = '#fff';
                 ctx.beginPath();
                 ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
@@ -853,34 +1154,33 @@
             }
             ctx.globalAlpha = 1;
 
-            // --- Weather effects (background) ---
+            // --- Fog ---
             if (game.weather === 'fog') {
-                ctx.fillStyle = 'rgba(200,200,210,0.08)';
+                ctx.fillStyle = 'rgba(180,180,200,0.06)';
                 ctx.fillRect(0, 0, W, H);
-                for (let i = 0; i < 5; i++) {
-                    const x = (i * 100 + game.frame * 0.2) % (W + 100) - 50;
-                    const y = 100 + i * 120 + Math.sin(game.frame * 0.01 + i) * 30;
-                    const grad = ctx.createRadialGradient(x, y, 10, x, y, 120);
-                    grad.addColorStop(0, 'rgba(200,200,210,0.06)');
+                for (let i = 0; i < 6; i++) {
+                    const x = (i * 80 + game.frame * 0.15) % (W + 100) - 50;
+                    const y = 80 + i * 100 + Math.sin(game.frame * 0.008 + i) * 40;
+                    const grad = ctx.createRadialGradient(x, y, 10, x, y, 140);
+                    grad.addColorStop(0, 'rgba(200,200,210,0.05)');
                     grad.addColorStop(1, 'rgba(200,200,210,0)');
                     ctx.fillStyle = grad;
-                    ctx.fillRect(x - 120, y - 120, 240, 240);
+                    ctx.fillRect(x - 140, y - 140, 280, 280);
                 }
             }
 
             // --- Road ---
-            // Asphalt with gradient
             const roadGrad = ctx.createLinearGradient(0, 0, 0, H);
             roadGrad.addColorStop(0, '#1a1a2e');
-            roadGrad.addColorStop(0.5, '#22223a');
+            roadGrad.addColorStop(0.5, '#22223e');
             roadGrad.addColorStop(1, '#1a1a2e');
             ctx.fillStyle = roadGrad;
             ctx.fillRect(0, 0, W, H);
 
-            // Road edges glow
+            // Road glow
             ctx.shadowColor = '#00ffaa22';
-            ctx.shadowBlur = 15;
-            ctx.strokeStyle = '#00ffaa44';
+            ctx.shadowBlur = 20;
+            ctx.strokeStyle = '#00ffaa33';
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(2, 0);
@@ -890,10 +1190,10 @@
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            // Lane markings (animated)
-            ctx.strokeStyle = '#ffffff88';
+            // Lane markings
+            ctx.strokeStyle = '#ffffff77';
             ctx.lineWidth = 3;
-            ctx.setLineDash([25, 20]);
+            ctx.setLineDash([30, 22]);
             ctx.lineDashOffset = -game.roadOffset;
             for (let i = 1; i < LANE_COUNT; i++) {
                 const x = i * LANE_WIDTH;
@@ -904,8 +1204,8 @@
             }
             ctx.setLineDash([]);
 
-            // Road edge lines
-            ctx.strokeStyle = '#ffd70044';
+            // Edge lines
+            ctx.strokeStyle = '#ffd70033';
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(0, 0);
@@ -914,17 +1214,17 @@
             ctx.lineTo(W, H);
             ctx.stroke();
 
-            // --- Speed lines (sense of speed) ---
-            if (game.speed > 8) {
-                ctx.strokeStyle = `rgba(255,255,255,${(game.speed - 8) * 0.01})`;
-                ctx.lineWidth = 1;
-                for (let i = 0; i < 6; i++) {
-                    const x = Math.random() * W;
-                    const y = Math.random() * H;
-                    const len = 10 + Math.random() * 30;
+            // --- Speed lines ---
+            if (game.speed > 7) {
+                const intensity = (game.speed - 7) / 7;
+                ctx.strokeStyle = `rgba(255,255,255,${intensity * 0.06})`;
+                ctx.lineWidth = 1.5;
+                for (let i = 0; i < 8; i++) {
+                    const x = (i * 55 + game.frame * 0.8) % W;
+                    const y = (game.frame * (2 + intensity * 4)) % H;
                     ctx.beginPath();
                     ctx.moveTo(x, y);
-                    ctx.lineTo(x, y + len);
+                    ctx.lineTo(x + 1, y + 30 + intensity * 50);
                     ctx.stroke();
                 }
             }
@@ -935,53 +1235,36 @@
                 const x = item.x;
                 const y = item.y;
 
-                if (item.type === 'nitro') {
-                    ctx.shadowColor = '#ff8800aa';
-                    ctx.shadowBlur = 25;
-                    ctx.fillStyle = '#ff8800';
-                    ctx.beginPath();
-                    ctx.arc(x, y, size, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.fillStyle = '#ffcc44';
-                    ctx.beginPath();
-                    ctx.arc(x - 3, y - 3, size * 0.4, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '12px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('N', x, y + 4);
-                } else if (item.type === 'shield') {
-                    ctx.shadowColor = '#00ccffaa';
-                    ctx.shadowBlur = 25;
-                    ctx.strokeStyle = '#00ccff';
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(x, y, size, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.fillStyle = '#00ccff44';
-                    ctx.beginPath();
-                    ctx.arc(x, y, size * 0.7, 0, Math.PI * 2);
-                    ctx.fill();
-                } else if (item.type === 'star') {
-                    ctx.shadowColor = '#ffd700aa';
-                    ctx.shadowBlur = 30;
-                    ctx.fillStyle = '#ffd700';
-                    ctx.font = `${size * 1.8}px Arial`;
-                    ctx.textAlign = 'center';
-                    ctx.fillText('⭐', x, y + size * 0.6);
-                } else if (item.type === 'coin') {
-                    ctx.shadowColor = '#ffd70088';
-                    ctx.shadowBlur = 20;
-                    ctx.fillStyle = '#ffd700';
-                    ctx.beginPath();
-                    ctx.arc(x, y, size * 0.8, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.fillStyle = '#ffaa00';
-                    ctx.font = '14px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('$', x, y + 5);
-                }
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(item.rotation);
+
+                // Glow
+                ctx.shadowColor = item.color;
+                ctx.shadowBlur = 25;
+
+                // Background circle
+                ctx.fillStyle = item.color + '44';
+                ctx.beginPath();
+                ctx.arc(0, 0, size + 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Main circle
+                ctx.fillStyle = item.color;
+                ctx.beginPath();
+                ctx.arc(0, 0, size, 0, Math.PI * 2);
+                ctx.fill();
+
                 ctx.shadowBlur = 0;
+
+                // Symbol
+                ctx.fillStyle = '#fff';
+                ctx.font = `${size * 0.9}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(item.symbol, 0, 1);
+
+                ctx.restore();
             }
 
             // --- Obstacles ---
@@ -991,29 +1274,33 @@
                 const w = obs.width;
                 const h = obs.height;
 
+                ctx.save();
+                ctx.translate(x + w / 2, y + h / 2);
+                ctx.rotate(obs.rotation || 0);
+
                 // Shadow
                 ctx.shadowColor = 'rgba(0,0,0,0.5)';
                 ctx.shadowBlur = 20;
-                ctx.shadowOffsetY = 5;
+                ctx.shadowOffsetY = 4;
 
                 // Body
-                const grad = ctx.createLinearGradient(x, y, x, y + h);
+                const grad = ctx.createLinearGradient(-w / 2, -h / 2, w / 2, h / 2);
                 grad.addColorStop(0, obs.color);
-                grad.addColorStop(0.5, '#fff');
+                grad.addColorStop(0.5, '#ffffff44');
                 grad.addColorStop(1, obs.color);
                 ctx.fillStyle = grad;
                 ctx.beginPath();
-                ctx.roundRect(x, y, w, h, 8);
+                ctx.roundRect(-w / 2, -h / 2, w, h, 6);
                 ctx.fill();
 
                 // Windows
                 ctx.shadowBlur = 0;
-                ctx.fillStyle = 'rgba(100,200,255,0.3)';
+                ctx.fillStyle = 'rgba(100,200,255,0.25)';
                 ctx.beginPath();
-                ctx.roundRect(x + 4, y + 6, w * 0.3, h * 0.25, 3);
+                ctx.roundRect(-w * 0.35, -h * 0.35, w * 0.25, h * 0.2, 3);
                 ctx.fill();
                 ctx.beginPath();
-                ctx.roundRect(x + w - 4 - w * 0.3, y + 6, w * 0.3, h * 0.25, 3);
+                ctx.roundRect(w * 0.1, -h * 0.35, w * 0.25, h * 0.2, 3);
                 ctx.fill();
 
                 // Headlights
@@ -1021,88 +1308,90 @@
                 ctx.shadowColor = '#ffdd44aa';
                 ctx.shadowBlur = 10;
                 ctx.beginPath();
-                ctx.arc(x + 6, y + 4, 4, 0, Math.PI * 2);
+                ctx.arc(-w * 0.3, -h * 0.42, 4, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.beginPath();
-                ctx.arc(x + w - 6, y + 4, 4, 0, Math.PI * 2);
+                ctx.arc(w * 0.3, -h * 0.42, 4, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.shadowBlur = 0;
 
-                // Type indicator
-                if (obs.type === 'truck') {
-                    ctx.fillStyle = '#ff880066';
-                    ctx.fillRect(x + 2, y + h * 0.2, w - 4, h * 0.15);
-                }
-                if (obs.type === 'police') {
-                    ctx.fillStyle = '#ff000066';
-                    ctx.fillRect(x + 4, y + 2, w - 8, 6);
-                    ctx.fillStyle = '#0000ff66';
-                    ctx.fillRect(x + 4, y + 10, w - 8, 6);
-                }
+                ctx.restore();
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetY = 0;
             }
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetY = 0;
 
             // --- Trail ---
             for (const t of game.trail) {
-                const alpha = t.life / 20;
-                ctx.fillStyle = `rgba(255,100,50,${alpha * 0.15})`;
+                const alpha = t.life / 15;
+                ctx.fillStyle = `rgba(255,100,50,${alpha * 0.12})`;
                 ctx.beginPath();
-                ctx.arc(t.x, t.y, 4 * alpha, 0, Math.PI * 2);
+                ctx.arc(t.x, t.y, 5 * alpha, 0, Math.PI * 2);
                 ctx.fill();
             }
 
             // --- Player Car ---
+            const carW = game.effects.giant ? CAR_W * 1.5 : (game.effects.tiny ? CAR_W * 0.6 : CAR_W);
+            const carH = game.effects.giant ? CAR_H * 1.5 : (game.effects.tiny ? CAR_H * 0.6 : CAR_H);
             const cx = game.carX;
             const cy = game.carY;
 
+            // Rainbow effect
+            let carColor = game.carColor;
+            if (game.effects.rainbow) {
+                const hue = (game.frame * 2) % 360;
+                carColor = `hsl(${hue}, 90%, 55%)`;
+            }
+
             // Shield effect
-            if (game.shield) {
+            if (game.shield || game.effects.invincible) {
                 ctx.shadowColor = '#00ccff';
-                ctx.shadowBlur = 40;
-                ctx.strokeStyle = `rgba(0,204,255,${0.3 + 0.3 * Math.sin(game.frame * 0.1)})`;
+                ctx.shadowBlur = 50;
+                ctx.strokeStyle = `rgba(0,204,255,${0.3 + 0.3 * Math.sin(game.frame * 0.08)})`;
                 ctx.lineWidth = 3;
                 ctx.beginPath();
-                ctx.arc(cx + CAR_W / 2, cy + CAR_H / 2, CAR_W * 0.8, 0, Math.PI * 2);
+                ctx.arc(cx + carW / 2, cy + carH / 2, carW * 0.9, 0, Math.PI * 2);
                 ctx.stroke();
                 ctx.shadowBlur = 0;
             }
 
+            // Ghost effect
+            if (game.effects.ghost) {
+                ctx.globalAlpha = 0.5;
+            }
+
             // Car shadow
             ctx.shadowColor = 'rgba(0,0,0,0.6)';
-            ctx.shadowBlur = 25;
+            ctx.shadowBlur = 30;
             ctx.shadowOffsetY = 8;
 
-            // Car body with angle
+            // Car body
             ctx.save();
-            ctx.translate(cx + CAR_W / 2, cy + CAR_H / 2);
+            ctx.translate(cx + carW / 2, cy + carH / 2);
             ctx.rotate(game.carAngle);
 
-            // Main body
-            const bodyGrad = ctx.createLinearGradient(-CAR_W / 2, -CAR_H / 2, CAR_W / 2, CAR_H / 2);
-            bodyGrad.addColorStop(0, '#ff2244');
-            bodyGrad.addColorStop(0.3, '#ff4466');
-            bodyGrad.addColorStop(0.7, '#dd1133');
+            const bodyGrad = ctx.createLinearGradient(-carW / 2, -carH / 2, carW / 2, carH / 2);
+            bodyGrad.addColorStop(0, carColor);
+            bodyGrad.addColorStop(0.3, '#ff6688');
+            bodyGrad.addColorStop(0.7, carColor);
             bodyGrad.addColorStop(1, '#991122');
             ctx.fillStyle = bodyGrad;
-            ctx.shadowColor = '#ff224488';
+            ctx.shadowColor = carColor + '66';
             ctx.shadowBlur = 30;
             ctx.beginPath();
-            ctx.roundRect(-CAR_W / 2, -CAR_H / 2, CAR_W, CAR_H, 10);
+            ctx.roundRect(-carW / 2, -carH / 2, carW, carH, 8);
             ctx.fill();
 
             // Racing stripe
             ctx.shadowBlur = 0;
-            ctx.fillStyle = 'rgba(255,255,255,0.15)';
-            ctx.fillRect(-3, -CAR_H / 2 + 8, 6, CAR_H - 16);
+            ctx.fillStyle = 'rgba(255,255,255,0.12)';
+            ctx.fillRect(-2, -carH / 2 + 6, 4, carH - 12);
 
             // Windows
-            ctx.fillStyle = 'rgba(80,200,255,0.35)';
+            ctx.fillStyle = 'rgba(80,200,255,0.3)';
             ctx.beginPath();
-            ctx.roundRect(-CAR_W / 2 + 5, -CAR_H / 2 + 6, CAR_W * 0.25, CAR_H * 0.28, 4);
+            ctx.roundRect(-carW / 2 + 4, -carH / 2 + 5, carW * 0.22, carH * 0.25, 3);
             ctx.fill();
             ctx.beginPath();
-            ctx.roundRect(CAR_W / 2 - 5 - CAR_W * 0.25, -CAR_H / 2 + 6, CAR_W * 0.25, CAR_H * 0.28, 4);
+            ctx.roundRect(carW / 2 - 4 - carW * 0.22, -carH / 2 + 5, carW * 0.22, carH * 0.25, 3);
             ctx.fill();
 
             // Headlights
@@ -1110,10 +1399,10 @@
             ctx.shadowColor = '#ffdd44aa';
             ctx.shadowBlur = 15;
             ctx.beginPath();
-            ctx.arc(-CAR_W / 2 + 7, -CAR_H / 2 + 5, 5, 0, Math.PI * 2);
+            ctx.arc(-carW / 2 + 6, -carH / 2 + 4, 4, 0, Math.PI * 2);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(CAR_W / 2 - 7, -CAR_H / 2 + 5, 5, 0, Math.PI * 2);
+            ctx.arc(carW / 2 - 6, -carH / 2 + 4, 4, 0, Math.PI * 2);
             ctx.fill();
 
             // Taillights
@@ -1121,31 +1410,29 @@
             ctx.shadowColor = '#ff2200aa';
             ctx.shadowBlur = 20;
             ctx.beginPath();
-            ctx.arc(-CAR_W / 2 + 6, CAR_H / 2 - 5, 4, 0, Math.PI * 2);
+            ctx.arc(-carW / 2 + 5, carH / 2 - 4, 3, 0, Math.PI * 2);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(CAR_W / 2 - 6, CAR_H / 2 - 5, 4, 0, Math.PI * 2);
+            ctx.arc(carW / 2 - 5, carH / 2 - 4, 3, 0, Math.PI * 2);
             ctx.fill();
-
-            // Spoiler
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = '#222';
-            ctx.fillRect(-CAR_W / 2 - 4, -CAR_H / 2 - 6, CAR_W + 8, 4);
 
             ctx.restore();
             ctx.shadowBlur = 0;
             ctx.shadowOffsetY = 0;
+            ctx.globalAlpha = 1;
 
             // --- Boost flame ---
             if (game.boosting) {
                 ctx.shadowColor = '#ff8800';
-                ctx.shadowBlur = 40;
-                for (let i = 0; i < 5; i++) {
-                    const fx = cx + CAR_W / 2 + (Math.random() - 0.5) * 10;
-                    const fy = cy + CAR_H + 5 + Math.random() * 15;
-                    const size = 5 + Math.random() * 12;
-                    const alpha = 0.3 + Math.random() * 0.5;
-                    ctx.fillStyle = `rgba(255,136,0,${alpha})`;
+                ctx.shadowBlur = 50;
+                for (let i = 0; i < 8; i++) {
+                    const fx = cx + carW / 2 + (Math.random() - 0.5) * carW * 0.5;
+                    const fy = cy + carH + 2 + Math.random() * 20;
+                    const size = 4 + Math.random() * 14;
+                    const alpha = 0.2 + Math.random() * 0.6;
+                    const colors = ['#ff4400', '#ff8800', '#ffcc00', '#ff2200'];
+                    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)] + Math.floor(alpha * 255).toString(16)
+                        .padStart(2, '0');
                     ctx.beginPath();
                     ctx.arc(fx, fy, size, 0, Math.PI * 2);
                     ctx.fill();
@@ -1161,7 +1448,7 @@
                 ctx.shadowColor = p.color;
                 ctx.shadowBlur = 10;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
+                ctx.arc(p.x, p.y, p.size * (0.5 + 0.5 * alpha), 0, Math.PI * 2);
                 ctx.fill();
             }
             ctx.globalAlpha = 1;
@@ -1169,12 +1456,12 @@
 
             // --- Rain ---
             if (game.weather === 'rain') {
-                ctx.strokeStyle = 'rgba(150,180,255,0.15)';
+                ctx.strokeStyle = 'rgba(150,180,255,0.12)';
                 ctx.lineWidth = 1.5;
                 for (const drop of game.rainDrops) {
                     ctx.beginPath();
                     ctx.moveTo(drop.x, drop.y);
-                    ctx.lineTo(drop.x + 2, drop.y + drop.length);
+                    ctx.lineTo(drop.x + 1.5, drop.y + drop.length);
                     ctx.stroke();
                 }
             }
@@ -1182,7 +1469,7 @@
             // --- Snow ---
             if (game.weather === 'snow') {
                 for (const flake of game.snowFlakes) {
-                    ctx.fillStyle = `rgba(255,255,255,${0.3 + Math.random() * 0.3})`;
+                    ctx.fillStyle = `rgba(255,255,255,${0.2 + Math.random() * 0.3})`;
                     ctx.beginPath();
                     ctx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2);
                     ctx.fill();
@@ -1191,55 +1478,61 @@
 
             // --- Boost Meter ---
             const boostPercent = game.boost / game.maxBoost;
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.roundRect(10, H - 30, 80, 12, 6);
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.roundRect(10, H - 28, 70, 10, 5);
             ctx.fill();
             const boostColor = boostPercent > 0.3 ? '#ff8800' : '#ff2200';
             ctx.fillStyle = boostColor;
             ctx.shadowColor = boostColor;
-            ctx.shadowBlur = 10;
-            ctx.roundRect(12, H - 28, 76 * boostPercent, 8, 4);
+            ctx.shadowBlur = 8;
+            ctx.roundRect(12, H - 26, 66 * boostPercent, 6, 3);
             ctx.fill();
             ctx.shadowBlur = 0;
             ctx.fillStyle = '#aaa';
-            ctx.font = '8px Arial';
-            ctx.fillText('🚀 BOOST', 12, H - 34);
+            ctx.font = '7px Arial';
+            ctx.fillText('🚀', 8, H - 20);
 
             // --- Level & Combo ---
-            ctx.fillStyle = '#ffd70088';
-            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#ffd70077';
+            ctx.font = 'bold 12px Arial';
             ctx.textAlign = 'right';
-            ctx.fillText(`LEVEL ${game.level}`, W - 10, 35);
+            ctx.fillText(`Lv.${game.level}`, W - 8, 30);
+
             if (game.combo > 2) {
-                ctx.fillStyle = `rgba(255,200,50,${0.5 + 0.5 * Math.sin(game.frame * 0.1)})`;
-                ctx.font = 'bold 16px Arial';
-                ctx.fillText(`🔥 ${game.combo}x COMBO`, W - 10, 55);
+                ctx.fillStyle = `rgba(255,200,50,${0.5 + 0.5 * Math.sin(game.frame * 0.08)})`;
+                ctx.font = 'bold 14px Arial';
+                ctx.fillText(`🔥 ${game.combo}x`, W - 8, 48);
             }
 
-            // --- Speed lines (peripheral) ---
-            if (game.speed > 10) {
-                const intensity = (game.speed - 10) / 10;
-                ctx.strokeStyle = `rgba(255,255,255,${intensity * 0.05})`;
-                ctx.lineWidth = 2;
-                for (let i = 0; i < 4; i++) {
-                    const x = (i * 120 + game.frame * 0.5) % W;
-                    const y = (game.frame * (2 + intensity * 3)) % H;
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                    ctx.lineTo(x + 2, y + 40 + intensity * 40);
-                    ctx.stroke();
-                }
+            // --- Active effects display ---
+            let effectY = 58;
+            const effectsList = [];
+            if (game.effects.magnet) effectsList.push('🧲 Magnet');
+            if (game.effects.doublePoints) effectsList.push('2x Points');
+            if (game.effects.invincible) effectsList.push('🛡️ Invincible');
+            if (game.effects.slowMotion) effectsList.push('🐢 Slow');
+            if (game.effects.ghost) effectsList.push('👻 Ghost');
+            if (game.effects.rainbow) effectsList.push('🌈 Rainbow');
+            if (game.effects.giant) effectsList.push('🦍 Giant');
+            if (game.effects.tiny) effectsList.push('🐭 Tiny');
+
+            for (const eff of effectsList) {
+                ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                ctx.font = '9px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText(eff, W - 8, effectY);
+                effectY += 14;
             }
 
             // --- Vignette ---
-            const vigGrad = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.9);
+            const vigGrad = ctx.createRadialGradient(W / 2, H / 2, H * 0.25, W / 2, H / 2, H * 0.9);
             vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
             vigGrad.addColorStop(1, 'rgba(0,0,0,0.3)');
             ctx.fillStyle = vigGrad;
             ctx.fillRect(0, 0, W, H);
         }
 
-        // ==================== RoundRect polyfill for Canvas ====================
+        // ==================== RoundRect polyfill ====================
         if (!CanvasRenderingContext2D.prototype.roundRect) {
             CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
                 const r = typeof radii === 'number' ? radii : (radii || 0);
@@ -1273,14 +1566,16 @@
             overlay.classList.remove('show');
             restartGame();
             gameLoop();
+            console.log('🏁 Speed Racer Ultimate loaded!');
+            console.log('🎮 Controls: Arrow keys / Touch buttons');
+            console.log('🚀 Boost: Space / B button');
+            console.log('⏸ Pause: P');
+            console.log('📊 25+ item types, 500+ combinations!');
+            console.log('🌈 Effects: Magnet, Double, Invincible, Slow, Ghost, Rainbow, Giant, Tiny');
+            console.log('💎 Rare items: Diamond, Golden Star, Ultra Shield, Mega Boost');
         }
 
         init();
-        console.log('🏁 Speed Racer X loaded!');
-        console.log('🎮 Controls: Arrow keys / Touch buttons');
-        console.log('🚀 Boost: Space / B button');
-        console.log('⏸ Pause: P');
-        console.log('📊 Features: Weather, Levels, Combos, Items, Shields, and more!');
     </script>
 </body>
 </html>
