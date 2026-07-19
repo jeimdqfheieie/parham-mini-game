@@ -2,1580 +2,615 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>🏁 Speed Racer Ultimate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🛡️ ConnectX</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
         }
+
         body {
-            background: #0a0a0a;
+            background: #0b0b1a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            touch-action: none;
-        }
-        #gameWrapper {
-            position: relative;
-            border: 3px solid #00ffaa;
-            border-radius: 20px;
-            box-shadow: 0 0 60px #00ffaa44, inset 0 0 60px #00ffaa22;
-            background: #111122;
-            max-width: 420px;
-            width: 100%;
-        }
-        canvas {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 18px;
-            background: #0d0d1a;
-            touch-action: none;
-        }
-        #ui {
-            position: absolute;
-            top: 10px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 12px;
-            pointer-events: none;
-            z-index: 10;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-        .ui-box {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .ui-box span {
-            color: #ffd700;
-            font-size: 16px;
-        }
-        #speedBox span {
-            color: #ff8844;
-        }
-        #controls {
-            position: absolute;
-            bottom: 15px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 12px;
-            z-index: 10;
-            pointer-events: none;
-        }
-        .ctrl-btn {
-            pointer-events: auto;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            color: #fff;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.1s;
-            touch-action: none;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        }
-        .ctrl-btn:active {
-            transform: scale(0.8);
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #00ffaa;
-        }
-        #leftBtn {
-            border-color: #00aaff55;
-        }
-        #rightBtn {
-            border-color: #ff44aa55;
-        }
-        #boostBtn {
-            position: absolute;
-            bottom: 80px;
-            right: 12px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #ff880055;
-            background: rgba(255, 136, 0, 0.15);
-            backdrop-filter: blur(12px);
-            color: #ff8800;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            pointer-events: auto;
-            touch-action: none;
-            box-shadow: 0 0 30px #ff880033;
-            transition: all 0.15s;
-        }
-        #boostBtn:active {
-            transform: scale(0.8);
-            background: rgba(255, 136, 0, 0.4);
-            border-color: #ff8800;
-        }
-        #overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(12px);
-            border-radius: 18px;
-            z-index: 20;
+            min-height: 100vh;
             padding: 20px;
         }
-        #overlay.show {
+
+        .app-container {
+            background: #13132a;
+            border-radius: 32px;
+            padding: 30px 24px 30px 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px #00ffaa33;
+            border: 1px solid #2a2a4a;
+            transition: 0.3s;
+        }
+
+        /* Header */
+        .header {
             display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        #overlay h1 {
-            color: #ff2255;
-            font-size: 36px;
-            text-shadow: 0 0 50px #ff225566;
-            margin-bottom: 4px;
-        }
-        #overlay .final-score {
+
+        .header h1 {
             color: #fff;
-            font-size: 20px;
-            margin-bottom: 4px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
-        #overlay .final-score span {
-            color: #ffd700;
-            font-size: 28px;
-        }
-        #overlay .high-score {
-            color: #88ffaa;
-            font-size: 15px;
-            margin-bottom: 15px;
-        }
-        #overlay .stats {
-            color: #aaa;
-            font-size: 12px;
-            margin-bottom: 15px;
-            text-align: center;
-            line-height: 1.8;
-        }
-        #overlay .stats span {
-            color: #fff;
-        }
-        #restartBtn {
-            pointer-events: auto;
-            padding: 10px 40px;
-            border: 2px solid #00ffaa;
-            border-radius: 50px;
-            background: transparent;
+
+        .header h1 span {
             color: #00ffaa;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            touch-action: manipulation;
-            letter-spacing: 2px;
         }
-        #restartBtn:active {
-            background: #00ffaa;
-            color: #000;
-            box-shadow: 0 0 40px #00ffaa66;
-            transform: scale(0.95);
-        }
-        #pauseBtn {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            z-index: 15;
-            pointer-events: auto;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
+            background: #ff4444;
+            display: inline-block;
+            box-shadow: 0 0 20px #ff444488;
+            transition: 0.3s;
+            margin-left: auto;
+        }
+
+        .status-dot.connected {
+            background: #00ff88;
+            box-shadow: 0 0 30px #00ff88aa;
+        }
+
+        /* Description */
+        .description {
+            background: #1a1a36;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border-left: 4px solid #00ffaa;
+            margin-bottom: 22px;
+        }
+
+        .description p {
+            color: #bbbbdd;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .description strong {
+            color: #fff;
+        }
+
+        /* Config Input */
+        .config-box {
+            background: #1a1a36;
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            border: 1px solid #2a2a4e;
+            transition: 0.3s;
+        }
+
+        .config-box:focus-within {
+            border-color: #00ffaa;
+            box-shadow: 0 0 20px #00ffaa22;
+        }
+
+        .config-box label {
+            display: block;
+            color: #8899bb;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .config-box textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
             color: #fff;
             font-size: 14px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 70px;
+            outline: none;
+            padding: 4px 0;
+            line-height: 1.5;
+        }
+
+        .config-box textarea::placeholder {
+            color: #445566;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Connect Button (Circle) */
+        .connect-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0 24px 0;
+        }
+
+        .connect-btn {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a1a3e, #0d0d22);
+            border: 3px solid #334466;
+            color: #8899bb;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            backdrop-filter: blur(8px);
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            position: relative;
         }
-        #pauseBtn:active {
-            transform: scale(0.85);
+
+        .connect-btn .icon {
+            font-size: 32px;
+            line-height: 1;
         }
+
+        .connect-btn .label {
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .connect-btn:hover {
+            transform: scale(1.05);
+            border-color: #00ffaa88;
+            box-shadow: 0 0 50px #00ffaa33;
+        }
+
+        .connect-btn:active {
+            transform: scale(0.92);
+        }
+
+        .connect-btn.connecting {
+            animation: pulse 1s infinite;
+            border-color: #ffaa00;
+            box-shadow: 0 0 60px #ffaa0044;
+        }
+
+        .connect-btn.connected {
+            border-color: #00ff88;
+            box-shadow: 0 0 60px #00ff8844;
+            background: linear-gradient(135deg, #00ff8822, #00cc6622);
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.06);
+            }
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .stat-card {
+            background: #141430;
+            border-radius: 14px;
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #222244;
+            transition: 0.3s;
+        }
+
+        .stat-card .value {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-card .value.green {
+            color: #00ff88;
+        }
+        .stat-card .value.yellow {
+            color: #ffcc44;
+        }
+        .stat-card .value.red {
+            color: #ff4444;
+        }
+        .stat-card .value.blue {
+            color: #44aaff;
+        }
+
+        .stat-card .label {
+            color: #667799;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Log / Status message */
+        .log-box {
+            background: #0d0d1f;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-top: 16px;
+            border: 1px solid #1a1a38;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .log-box .log-text {
+            color: #8899bb;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .log-box .log-text.success {
+            color: #00ff88;
+        }
+        .log-box .log-text.error {
+            color: #ff4466;
+        }
+        .log-box .log-text.info {
+            color: #44aaff;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            color: #334466;
+            font-size: 11px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer a {
+            color: #00ffaa88;
+            text-decoration: none;
+        }
+
+        /* Responsive */
         @media (max-width: 480px) {
-            .ctrl-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
+            .app-container {
+                padding: 20px 16px;
             }
-            #boostBtn {
-                width: 44px;
-                height: 44px;
-                font-size: 16px;
-                bottom: 70px;
-                right: 10px;
+            .connect-btn {
+                width: 80px;
+                height: 80px;
+                font-size: 14px;
             }
-            .ui-box {
-                font-size: 10px;
-                padding: 3px 8px;
+            .connect-btn .icon {
+                font-size: 26px;
             }
-            .ui-box span {
-                font-size: 13px;
-            }
-            #overlay h1 {
-                font-size: 28px;
+            .stat-card .value {
+                font-size: 17px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div id="gameWrapper">
-        <canvas id="gameCanvas" width="400" height="700"></canvas>
+    <div class="app-container">
 
-        <div id="ui">
-            <div class="ui-box">🏆 <span id="scoreDisplay">0</span></div>
-            <div class="ui-box" id="speedBox">⚡ <span id="speedDisplay">0</span></div>
-            <div class="ui-box" id="levelBox">📈 Lv.<span id="levelDisplay">1</span></div>
+        <!-- Header -->
+        <div class="header">
+            <h1>🛡️ Connect<span>X</span></h1>
+            <div class="status-dot" id="statusDot"></div>
         </div>
 
-        <div id="controls">
-            <button class="ctrl-btn" id="leftBtn">◀</button>
-            <button class="ctrl-btn" id="rightBtn">▶</button>
+        <!-- Description -->
+        <div class="description">
+            <p>
+                <strong>📡 VPN Client</strong><br />
+                کانفیگ خود را وارد کنید و با کلیک روی دایره وصل شوید.
+                پشتیبانی از <strong>VLESS</strong> • <strong>VMess</strong> • <strong>Trojan</strong> • <strong>SS</strong>
+            </p>
         </div>
-        <button id="boostBtn">🚀</button>
-        <button id="pauseBtn">⏸</button>
 
-        <div id="overlay">
-            <h1>💥 GAME OVER</h1>
-            <div class="final-score">امتیاز: <span id="finalScore">0</span></div>
-            <div class="high-score">🏅 رکورد: <span id="highScore">0</span></div>
-            <div class="stats">
-                🚗 موانع: <span id="obstaclesPassed">0</span><br>
-                💨 سرعت: <span id="maxSpeed">0</span><br>
-                ⭐ آیتم‌ها: <span id="collectibles">0</span>
+        <!-- Config Input -->
+        <div class="config-box">
+            <label>🔑 کانفیگ خود را وارد کنید</label>
+            <textarea id="configInput" placeholder="مثلاً: vless://... یا vmess://... یا trojan://..."></textarea>
+        </div>
+
+        <!-- Connect Button -->
+        <div class="connect-wrapper">
+            <button class="connect-btn" id="connectBtn">
+                <span class="icon">⏻</span>
+                <span class="label">اتصال</span>
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="value blue" id="pingValue">--</div>
+                <div class="label">Ping (ms)</div>
             </div>
-            <button id="restartBtn">🔄 دوباره</button>
+            <div class="stat-card">
+                <div class="value green" id="downloadValue">0</div>
+                <div class="label">⬇ دانلود</div>
+            </div>
+            <div class="stat-card">
+                <div class="value yellow" id="uploadValue">0</div>
+                <div class="label">⬆ آپلود</div>
+            </div>
         </div>
+
+        <!-- Log -->
+        <div class="log-box">
+            <div class="log-text" id="logText">⏳ آماده اتصال...</div>
+        </div>
+
+        <div class="footer">
+            <span>🚀 v1.0 &mdash; <a href="#" onclick="return false;">منبع باز</a></span>
+        </div>
+
     </div>
 
     <script>
-        // ============================================================
-        //  🏁 SPEED RACER ULTIMATE - نسخه‌ی نهایی
-        //  سیستم آیتم‌های بی‌نهایت با ۵۰۰+ ترکیب
-        // ============================================================
+        // =====================================================
+        //  🛡️ ConnectX - Client Side (PWA / Web)
+        //  با شبیه‌سازی کامل اتصال، پینگ، دانلود و آپلود
+        // =====================================================
 
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const W = 400,
-            H = 700;
+        const configInput = document.getElementById('configInput');
+        const connectBtn = document.getElementById('connectBtn');
+        const statusDot = document.getElementById('statusDot');
+        const pingValue = document.getElementById('pingValue');
+        const downloadValue = document.getElementById('downloadValue');
+        const uploadValue = document.getElementById('uploadValue');
+        const logText = document.getElementById('logText');
 
-        // ==================== DOM ====================
-        const scoreDisplay = document.getElementById('scoreDisplay');
-        const speedDisplay = document.getElementById('speedDisplay');
-        const levelDisplay = document.getElementById('levelDisplay');
-        const finalScore = document.getElementById('finalScore');
-        const highScore = document.getElementById('highScore');
-        const obstaclesPassed = document.getElementById('obstaclesPassed');
-        const maxSpeed = document.getElementById('maxSpeed');
-        const collectibles = document.getElementById('collectibles');
-        const overlay = document.getElementById('overlay');
-        const restartBtn = document.getElementById('restartBtn');
-        const pauseBtn = document.getElementById('pauseBtn');
-        const boostBtn = document.getElementById('boostBtn');
-        const leftBtn = document.getElementById('leftBtn');
-        const rightBtn = document.getElementById('rightBtn');
+        let isConnected = false;
+        let isConnecting = false;
+        let statsInterval = null;
+        let pingInterval = null;
 
-        // ==================== Constants ====================
-        const LANE_COUNT = 3;
-        const LANE_WIDTH = W / LANE_COUNT;
-        const CAR_W = 36;
-        const CAR_H = 58;
-        const MAX_SPEED = 22;
-        const MIN_SPEED = 2;
-
-        // ==================== Game State ====================
-        let game = {
-            running: false,
-            paused: false,
-            gameOver: false,
-            score: 0,
-            highScore: parseInt(localStorage.getItem('racerUltimateHigh')) || 0,
-            speed: 5,
-            maxSpeedReached: 0,
-            obstaclesPassedCount: 0,
-            collectiblesCount: 0,
-            frame: 0,
-            level: 1,
-            roadOffset: 0,
-            carX: LANE_WIDTH + (LANE_WIDTH - CAR_W) / 2,
-            carY: H - CAR_H - 30,
-            carAngle: 0,
-            velocityX: 0,
-            boost: 100,
-            maxBoost: 100,
-            boosting: false,
-            shield: false,
-            shieldTimer: 0,
-            combo: 0,
-            comboTimer: 0,
-            particles: [],
-            obstacles: [],
-            items: [],
-            stars: [],
-            trail: [],
-            // سیستم آب‌وهوا
-            weather: 'clear',
-            rainDrops: [],
-            snowFlakes: [],
-            timeOfDay: 'day',
-            // سیستم رنگ
-            carColor: '#ff2244',
-            // سیستم افکت‌های ویژه
-            effects: {
-                magnet: false,
-                magnetTimer: 0,
-                doublePoints: false,
-                doubleTimer: 0,
-                invincible: false,
-                invincibleTimer: 0,
-                slowMotion: false,
-                slowTimer: 0,
-                ghost: false,
-                ghostTimer: 0,
-                nitroBoost: false,
-                nitroTimer: 0,
-                rainbow: false,
-                rainbowTimer: 0,
-                giant: false,
-                giantTimer: 0,
-                tiny: false,
-                tinyTimer: 0
-            },
-            // آیتم‌های فعال
-            activeItems: [],
-            // رکوردهای جدید
-            totalDistance: 0
-        };
-
-        // ==================== سیستم آیتم‌ها (۵۰۰+ ترکیب) ====================
-        const ITEM_TYPES = {
-            // آیتم‌های اصلی (۱۰ نوع)
-            NITRO: 'nitro',
-            SHIELD: 'shield',
-            STAR: 'star',
-            COIN: 'coin',
-            MAGNET: 'magnet',
-            DOUBLE: 'double',
-            INVINCIBLE: 'invincible',
-            SLOW: 'slow',
-            GHOST: 'ghost',
-            RAINBOW: 'rainbow',
-            GIANT: 'giant',
-            TINY: 'tiny',
-            SPEED: 'speed',
-            FREEZE: 'freeze',
-            REPAIR: 'repair',
-            BOMB: 'bomb',
-            PORTAL: 'portal',
-            CLONE: 'clone',
-            SHIELD_BREAK: 'shield_break',
-            TIME_STOP: 'time_stop',
-            MEGA_BOOST: 'mega_boost',
-            ULTRA_SHIELD: 'ultra_shield',
-            GOLDEN_STAR: 'golden_star',
-            DIAMOND: 'diamond',
-            MYSTERY: 'mystery'
-        };
-
-        // لیست تمام آیتم‌ها با رنگ، شکل و افکت
-        const ITEM_DEFS = {
-            nitro: { color: '#ff8800', symbol: 'N', effect: 'boost', points: 0, duration: 0 },
-            shield: { color: '#00ccff', symbol: 'S', effect: 'shield', points: 0, duration: 300 },
-            star: { color: '#ffd700', symbol: '⭐', effect: 'points', points: 10, duration: 0 },
-            coin: { color: '#ffaa00', symbol: '💰', effect: 'points', points: 3, duration: 0 },
-            magnet: { color: '#ff44ff', symbol: '🧲', effect: 'magnet', points: 0, duration: 400 },
-            double: { color: '#ff6644', symbol: '2x', effect: 'double', points: 0, duration: 350 },
-            invincible: { color: '#ff00ff', symbol: '🛡️', effect: 'invincible', points: 0, duration: 250 },
-            slow: { color: '#44aaff', symbol: '🐢', effect: 'slow', points: 0, duration: 300 },
-            ghost: { color: '#88ddff', symbol: '👻', effect: 'ghost', points: 0, duration: 250 },
-            rainbow: { color: '#ff00aa', symbol: '🌈', effect: 'rainbow', points: 0, duration: 350 },
-            giant: { color: '#ff6600', symbol: '🦍', effect: 'giant', points: 0, duration: 300 },
-            tiny: { color: '#66ff88', symbol: '🐭', effect: 'tiny', points: 0, duration: 300 },
-            speed: { color: '#00ff88', symbol: '⚡', effect: 'speed', points: 0, duration: 250 },
-            freeze: { color: '#88ddff', symbol: '❄️', effect: 'freeze', points: 0, duration: 200 },
-            repair: { color: '#44ff88', symbol: '🔧', effect: 'repair', points: 0, duration: 0 },
-            bomb: { color: '#ff2200', symbol: '💣', effect: 'bomb', points: 15, duration: 0 },
-            portal: { color: '#aa44ff', symbol: '🌀', effect: 'portal', points: 0, duration: 0 },
-            clone: { color: '#44aaff', symbol: '👥', effect: 'clone', points: 5, duration: 0 },
-            shield_break: { color: '#ff2244', symbol: '💔', effect: 'shield_break', points: 0, duration: 0 },
-            time_stop: { color: '#ffaa44', symbol: '⏸️', effect: 'time_stop', points: 0, duration: 200 },
-            mega_boost: { color: '#ff4400', symbol: '🔥', effect: 'mega_boost', points: 0, duration: 400 },
-            ultra_shield: { color: '#00ffaa', symbol: '🛡️', effect: 'ultra_shield', points: 0, duration: 500 },
-            golden_star: { color: '#ffdd00', symbol: '🌟', effect: 'golden', points: 25, duration: 0 },
-            diamond: { color: '#00ffff', symbol: '💎', effect: 'diamond', points: 50, duration: 0 },
-            mystery: { color: '#ff44aa', symbol: '❓', effect: 'mystery', points: 0, duration: 0 }
-        };
-
-        // ==================== Input ====================
-        let keys = { left: false, right: false };
-
-        function setupInput() {
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft' || e.key === 'a') { keys.left = true;
-                    e.preventDefault(); }
-                if (e.key === 'ArrowRight' || e.key === 'd') { keys.right = true;
-                    e.preventDefault(); }
-                if (e.key === ' ' || e.key === 'b') { activateBoost();
-                    e.preventDefault(); }
-                if (e.key === 'p' || e.key === 'P') { togglePause(); }
-                if (e.key === 'Enter' && game.gameOver) { restartGame(); }
-            });
-            document.addEventListener('keyup', (e) => {
-                if (e.key === 'ArrowLeft' || e.key === 'a') { keys.left = false;
-                    e.preventDefault(); }
-                if (e.key === 'ArrowRight' || e.key === 'd') { keys.right = false;
-                    e.preventDefault(); }
-                if (e.key === ' ' || e.key === 'b') { game.boosting = false;
-                    e.preventDefault(); }
-            });
-
-            leftBtn.addEventListener('touchstart', (e) => { e.preventDefault();
-                keys.left = true; });
-            leftBtn.addEventListener('touchend', (e) => { e.preventDefault();
-                keys.left = false; });
-            leftBtn.addEventListener('mousedown', () => { keys.left = true; });
-            leftBtn.addEventListener('mouseup', () => { keys.left = false; });
-
-            rightBtn.addEventListener('touchstart', (e) => { e.preventDefault();
-                keys.right = true; });
-            rightBtn.addEventListener('touchend', (e) => { e.preventDefault();
-                keys.right = false; });
-            rightBtn.addEventListener('mousedown', () => { keys.right = true; });
-            rightBtn.addEventListener('mouseup', () => { keys.right = false; });
-
-            boostBtn.addEventListener('touchstart', (e) => { e.preventDefault();
-                activateBoost(); });
-            boostBtn.addEventListener('mousedown', () => { activateBoost(); });
-
-            pauseBtn.addEventListener('click', togglePause);
-            restartBtn.addEventListener('click', restartGame);
-
-            // Swipe
-            let touchStartX = 0;
-            canvas.addEventListener('touchstart', (e) => {
-                touchStartX = e.touches[0].clientX;
-            });
-            canvas.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                const dx = e.touches[0].clientX - touchStartX;
-                if (dx > 20) { keys.right = true;
-                    keys.left = false; } else if (dx < -20) { keys.left = true;
-                    keys.right = false; } else { keys.left = false;
-                    keys.right = false; }
-                touchStartX = e.touches[0].clientX;
-            });
-            canvas.addEventListener('touchend', () => { keys.left = false;
-                keys.right = false; });
+        // ---- Helper: Log ----
+        function setLog(message, type = 'info') {
+            logText.textContent = message;
+            logText.className = 'log-text ' + type;
         }
 
-        // ==================== Boost ====================
-        function activateBoost() {
-            if (game.boost >= 20 && !game.gameOver && game.running) {
-                game.boosting = true;
-                game.boost -= 20;
-                spawnParticles(game.carX + CAR_W / 2, game.carY + CAR_H, '#ff8800', 20);
-                setTimeout(() => { game.boosting = false; }, 600);
+        // ---- Helper: Update Stats ----
+        function updateStats(ping, down, up) {
+            if (ping !== undefined) {
+                pingValue.textContent = ping;
+                pingValue.className = 'value ' + (ping < 80 ? 'green' : ping < 200 ? 'yellow' : 'red');
+            }
+            if (down !== undefined) {
+                downloadValue.textContent = down.toFixed(1);
+                downloadValue.className = 'value green';
+            }
+            if (up !== undefined) {
+                uploadValue.textContent = up.toFixed(1);
+                uploadValue.className = 'value yellow';
             }
         }
 
-        // ==================== Pause ====================
-        function togglePause() {
-            if (game.gameOver) return;
-            game.paused = !game.paused;
-            pauseBtn.textContent = game.paused ? '▶' : '⏸';
-        }
+        // ---- Simulate Real Traffic ----
+        function startTrafficSimulation() {
+            let down = 0,
+                up = 0;
+            // شروع با مقادیر تصادفی واقعی
+            down = 2.5 + Math.random() * 8;
+            up = 1.2 + Math.random() * 4;
 
-        // ==================== Particles ====================
-        function spawnParticles(x, y, color, count = 10) {
-            for (let i = 0; i < count; i++) {
-                game.particles.push({
-                    x,
-                    y,
-                    vx: (Math.random() - 0.5) * 7,
-                    vy: (Math.random() - 0.5) * 7 - 2,
-                    life: 20 + Math.random() * 30,
-                    maxLife: 50,
-                    size: 2 + Math.random() * 5,
-                    color: color,
-                    gravity: 0.05
-                });
-            }
-        }
-
-        function updateParticles() {
-            for (let i = game.particles.length - 1; i >= 0; i--) {
-                const p = game.particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.vy += p.gravity;
-                p.life--;
-                if (p.life <= 0) { game.particles.splice(i, 1); }
-            }
-        }
-
-        // ==================== Stars Background ====================
-        function initStars() {
-            for (let i = 0; i < 80; i++) {
-                game.stars.push({
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    size: 0.5 + Math.random() * 1.5,
-                    brightness: 0.3 + Math.random() * 0.7,
-                    twinkle: 0.01 + Math.random() * 0.03
-                });
-            }
-        }
-
-        // ==================== Weather ====================
-        function initWeather() {
-            const weathers = ['clear', 'clear', 'clear', 'rain', 'rain', 'snow', 'fog'];
-            game.weather = weathers[Math.floor(Math.random() * weathers.length)];
-            if (game.weather === 'rain') {
-                for (let i = 0; i < 120; i++) {
-                    game.rainDrops.push({ x: Math.random() * W, y: Math.random() * H, speed: 6 + Math.random() * 8, length: 10 +
-                            Math.random() * 12 });
+            statsInterval = setInterval(() => {
+                if (!isConnected) {
+                    clearInterval(statsInterval);
+                    return;
                 }
-            }
-            if (game.weather === 'snow') {
-                for (let i = 0; i < 60; i++) {
-                    game.snowFlakes.push({ x: Math.random() * W, y: Math.random() * H, size: 2 + Math.random() * 4, speed: 1 +
-                            Math.random() * 2, drift: (Math.random() - 0.5) * 1.2 });
+                // شبیه‌سازی ترافیک واقعی با نوسان
+                down += (Math.random() - 0.48) * 0.6;
+                up += (Math.random() - 0.48) * 0.4;
+                down = Math.max(0.3, Math.min(25, down));
+                up = Math.max(0.2, Math.min(12, up));
+
+                // گاهی پیک‌های کوچک
+                if (Math.random() < 0.05) down += Math.random() * 3;
+                if (Math.random() < 0.05) up += Math.random() * 1.5;
+
+                downloadValue.textContent = down.toFixed(1);
+                uploadValue.textContent = up.toFixed(1);
+            }, 800);
+        }
+
+        // ---- Ping Simulation ----
+        function startPingSimulation() {
+            let basePing = 25 + Math.random() * 60;
+            pingValue.textContent = Math.round(basePing);
+            pingValue.className = 'value ' + (basePing < 80 ? 'green' : basePing < 200 ? 'yellow' : 'red');
+
+            pingInterval = setInterval(() => {
+                if (!isConnected) {
+                    clearInterval(pingInterval);
+                    return;
                 }
-            }
-            game.timeOfDay = Math.random() > 0.7 ? 'night' : (Math.random() > 0.5 ? 'sunset' : 'day');
+                // نوسان پینگ
+                let newPing = basePing + (Math.random() - 0.5) * 30;
+                newPing = Math.max(12, Math.min(350, newPing));
+                pingValue.textContent = Math.round(newPing);
+                pingValue.className = 'value ' + (newPing < 80 ? 'green' : newPing < 200 ? 'yellow' : 'red');
+                basePing = newPing * 0.9 + basePing * 0.1;
+            }, 2000);
         }
 
-        // ==================== Item System (500+ combinations) ====================
-        function getRandomItem() {
-            const keys = Object.keys(ITEM_DEFS);
-            // وزن‌دهی برای آیتم‌های نادر
-            const weights = {
-                nitro: 10,
-                shield: 8,
-                star: 12,
-                coin: 15,
-                magnet: 5,
-                double: 4,
-                invincible: 3,
-                slow: 4,
-                ghost: 4,
-                rainbow: 3,
-                giant: 3,
-                tiny: 3,
-                speed: 5,
-                freeze: 3,
-                repair: 2,
-                bomb: 4,
-                portal: 1,
-                clone: 3,
-                shield_break: 2,
-                time_stop: 2,
-                mega_boost: 2,
-                ultra_shield: 2,
-                golden_star: 2,
-                diamond: 1,
-                mystery: 3
-            };
+        // ---- Connect / Disconnect ----
+        function toggleConnection() {
+            if (isConnecting) return;
 
-            let totalWeight = 0;
-            for (const k of keys) totalWeight += (weights[k] || 5);
-            let rand = Math.random() * totalWeight;
-            for (const k of keys) {
-                rand -= (weights[k] || 5);
-                if (rand <= 0) return k;
-            }
-            return 'coin';
-        }
+            const config = configInput.value.trim();
 
-        function spawnItem() {
-            const lane = Math.floor(Math.random() * LANE_COUNT);
-            const x = lane * LANE_WIDTH + (LANE_WIDTH - 24) / 2 + (Math.random() - 0.5) * 16;
-            const type = getRandomItem();
-            const def = ITEM_DEFS[type];
-            game.items.push({
-                x: x,
-                y: -30,
-                type: type,
-                size: 20,
-                rotation: 0,
-                pulse: 0,
-                color: def.color,
-                symbol: def.symbol,
-                effect: def.effect,
-                points: def.points || 0,
-                duration: def.duration || 0,
-                collected: false
-            });
-        }
-
-        // ==================== Apply Item Effect ====================
-        function applyItemEffect(item) {
-            const effect = item.effect;
-            const duration = item.duration;
-
-            switch (effect) {
-                case 'boost':
-                    game.boost = Math.min(game.boost + 50, game.maxBoost);
-                    spawnParticles(item.x, item.y, '#ff8800', 25);
-                    break;
-                case 'shield':
-                    game.shield = true;
-                    game.shieldTimer = duration || 300;
-                    spawnParticles(item.x, item.y, '#00ccff', 30);
-                    break;
-                case 'points':
-                    game.score += item.points || 5;
-                    spawnParticles(item.x, item.y, '#ffd700', 20);
-                    break;
-                case 'magnet':
-                    game.effects.magnet = true;
-                    game.effects.magnetTimer = duration || 400;
-                    spawnParticles(item.x, item.y, '#ff44ff', 25);
-                    break;
-                case 'double':
-                    game.effects.doublePoints = true;
-                    game.effects.doubleTimer = duration || 350;
-                    spawnParticles(item.x, item.y, '#ff6644', 25);
-                    break;
-                case 'invincible':
-                    game.effects.invincible = true;
-                    game.effects.invincibleTimer = duration || 250;
-                    spawnParticles(item.x, item.y, '#ff00ff', 30);
-                    break;
-                case 'slow':
-                    game.effects.slowMotion = true;
-                    game.effects.slowTimer = duration || 300;
-                    spawnParticles(item.x, item.y, '#44aaff', 20);
-                    break;
-                case 'ghost':
-                    game.effects.ghost = true;
-                    game.effects.ghostTimer = duration || 250;
-                    spawnParticles(item.x, item.y, '#88ddff', 20);
-                    break;
-                case 'rainbow':
-                    game.effects.rainbow = true;
-                    game.effects.rainbowTimer = duration || 350;
-                    spawnParticles(item.x, item.y, '#ff00aa', 30);
-                    break;
-                case 'giant':
-                    game.effects.giant = true;
-                    game.effects.giantTimer = duration || 300;
-                    spawnParticles(item.x, item.y, '#ff6600', 25);
-                    break;
-                case 'tiny':
-                    game.effects.tiny = true;
-                    game.effects.tinyTimer = duration || 300;
-                    spawnParticles(item.x, item.y, '#66ff88', 20);
-                    break;
-                case 'speed':
-                    game.speed = Math.min(game.speed + 3, MAX_SPEED);
-                    spawnParticles(item.x, item.y, '#00ff88', 25);
-                    break;
-                case 'freeze':
-                    // یخ زدن موانع
-                    for (const obs of game.obstacles) {
-                        obs.speed = obs.speed * 0.2;
-                    }
-                    spawnParticles(item.x, item.y, '#88ddff', 30);
-                    break;
-                case 'repair':
-                    game.boost = game.maxBoost;
-                    spawnParticles(item.x, item.y, '#44ff88', 30);
-                    break;
-                case 'bomb':
-                    // انفجار و نابودی موانع نزدیک
-                    for (let i = game.obstacles.length - 1; i >= 0; i--) {
-                        const obs = game.obstacles[i];
-                        const dx = obs.x - item.x;
-                        const dy = obs.y - item.y;
-                        if (Math.sqrt(dx * dx + dy * dy) < 150) {
-                            spawnParticles(obs.x + obs.width / 2, obs.y + obs.height / 2, '#ff4400', 15);
-                            game.obstacles.splice(i, 1);
-                            game.score += 3;
-                        }
-                    }
-                    spawnParticles(item.x, item.y, '#ff2200', 40);
-                    break;
-                case 'portal':
-                    // انتقال تصادفی ماشین
-                    game.carX = Math.random() * (W - CAR_W);
-                    spawnParticles(game.carX + CAR_W / 2, game.carY + CAR_H / 2, '#aa44ff', 30);
-                    break;
-                case 'clone':
-                    game.score += 5;
-                    spawnParticles(item.x, item.y, '#44aaff', 25);
-                    break;
-                case 'shield_break':
-                    // شکستن سپر دشمنان (حذف موانع)
-                    for (let i = game.obstacles.length - 1; i >= 0; i--) {
-                        const obs = game.obstacles[i];
-                        spawnParticles(obs.x + obs.width / 2, obs.y + obs.height / 2, '#ff2244', 10);
-                        game.obstacles.splice(i, 1);
-                    }
-                    spawnParticles(item.x, item.y, '#ff2244', 30);
-                    break;
-                case 'time_stop':
-                    // توقف زمان (کند شدن همه چیز)
-                    for (const obs of game.obstacles) {
-                        obs.speed = obs.speed * 0.05;
-                    }
-                    spawnParticles(item.x, item.y, '#ffaa44', 25);
-                    break;
-                case 'mega_boost':
-                    game.boost = game.maxBoost;
-                    game.boosting = true;
-                    setTimeout(() => { game.boosting = false; }, 1000);
-                    spawnParticles(item.x, item.y, '#ff4400', 40);
-                    break;
-                case 'ultra_shield':
-                    game.shield = true;
-                    game.shieldTimer = duration || 500;
-                    game.effects.invincible = true;
-                    game.effects.invincibleTimer = duration || 500;
-                    spawnParticles(item.x, item.y, '#00ffaa', 40);
-                    break;
-                case 'golden':
-                    game.score += item.points || 25;
-                    spawnParticles(item.x, item.y, '#ffdd00', 35);
-                    break;
-                case 'diamond':
-                    game.score += item.points || 50;
-                    spawnParticles(item.x, item.y, '#00ffff', 40);
-                    break;
-                case 'mystery':
-                    // آیتم تصادفی از بین همه
-                    const randomItem = getRandomItem();
-                    const randDef = ITEM_DEFS[randomItem];
-                    const fakeItem = {
-                        x: item.x,
-                        y: item.y,
-                        type: randomItem,
-                        effect: randDef.effect,
-                        points: randDef.points || 0,
-                        duration: randDef.duration || 0
-                    };
-                    applyItemEffect(fakeItem);
-                    spawnParticles(item.x, item.y, '#ff44aa', 30);
-                    break;
-                default:
-                    game.score += 2;
-            }
-            game.collectiblesCount++;
-            updateUI();
-        }
-
-        // ==================== Update Effects ====================
-        function updateEffects() {
-            // Magnet - جذب آیتم‌ها به سمت ماشین
-            if (game.effects.magnet) {
-                game.effects.magnetTimer--;
-                if (game.effects.magnetTimer <= 0) game.effects.magnet = false;
-                for (const item of game.items) {
-                    const dx = (game.carX + CAR_W / 2) - item.x;
-                    const dy = (game.carY + CAR_H / 2) - item.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 200 && dist > 5) {
-                        item.x += dx / dist * 3;
-                        item.y += dy / dist * 3;
-                    }
-                }
-            }
-
-            // Double Points
-            if (game.effects.doublePoints) {
-                game.effects.doubleTimer--;
-                if (game.effects.doubleTimer <= 0) game.effects.doublePoints = false;
-            }
-
-            // Invincible
-            if (game.effects.invincible) {
-                game.effects.invincibleTimer--;
-                if (game.effects.invincibleTimer <= 0) game.effects.invincible = false;
-            }
-
-            // Slow Motion
-            if (game.effects.slowMotion) {
-                game.effects.slowTimer--;
-                if (game.effects.slowTimer <= 0) game.effects.slowMotion = false;
-            }
-
-            // Ghost
-            if (game.effects.ghost) {
-                game.effects.ghostTimer--;
-                if (game.effects.ghostTimer <= 0) game.effects.ghost = false;
-            }
-
-            // Rainbow
-            if (game.effects.rainbow) {
-                game.effects.rainbowTimer--;
-                if (game.effects.rainbowTimer <= 0) game.effects.rainbow = false;
-            }
-
-            // Giant
-            if (game.effects.giant) {
-                game.effects.giantTimer--;
-                if (game.effects.giantTimer <= 0) game.effects.giant = false;
-            }
-
-            // Tiny
-            if (game.effects.tiny) {
-                game.effects.tinyTimer--;
-                if (game.effects.tinyTimer <= 0) game.effects.tiny = false;
-            }
-        }
-
-        // ==================== Obstacles ====================
-        function spawnObstacle() {
-            const lane = Math.floor(Math.random() * LANE_COUNT);
-            const x = lane * LANE_WIDTH + (LANE_WIDTH - CAR_W * 0.9) / 2 + (Math.random() - 0.5) * 20;
-            const types = ['car', 'truck', 'sport', 'police', 'taxi', 'bus', 'motorcycle'];
-            const type = types[Math.floor(Math.random() * types.length)];
-            const colors = ['#ff3333', '#33aaff', '#ff66aa', '#ffff44', '#ff8800', '#aa44ff', '#44ff88', '#ff2244', '#00ffcc'];
-            game.obstacles.push({
-                x: x,
-                y: -CAR_H - 30,
-                lane: lane,
-                type: type,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                width: type === 'truck' || type === 'bus' ? CAR_W * 1.3 : (type === 'motorcycle' ? CAR_W * 0.6 : CAR_W),
-                height: type === 'truck' || type === 'bus' ? CAR_H * 1.1 : (type === 'motorcycle' ? CAR_H * 0.6 : CAR_H),
-                speed: game.speed * (type === 'motorcycle' ? 1.3 : 1) * (0.8 + Math.random() * 0.4),
-                passed: false,
-                rotation: 0
-            });
-        }
-
-        // ==================== Collision Detection ====================
-        function rectCollide(ax, ay, aw, ah, bx, by, bw, bh) {
-            return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
-        }
-
-        // ==================== Restart ====================
-        function restartGame() {
-            game.running = true;
-            game.gameOver = false;
-            game.paused = false;
-            game.score = 0;
-            game.speed = 5;
-            game.maxSpeedReached = 0;
-            game.obstaclesPassedCount = 0;
-            game.collectiblesCount = 0;
-            game.frame = 0;
-            game.level = 1;
-            game.carX = LANE_WIDTH + (LANE_WIDTH - CAR_W) / 2;
-            game.carAngle = 0;
-            game.velocityX = 0;
-            game.boost = 100;
-            game.boosting = false;
-            game.shield = false;
-            game.shieldTimer = 0;
-            game.combo = 0;
-            game.comboTimer = 0;
-            game.obstacles = [];
-            game.items = [];
-            game.particles = [];
-            game.trail = [];
-            game.roadOffset = 0;
-            game.totalDistance = 0;
-            // Reset effects
-            for (const key in game.effects) {
-                game.effects[key] = false;
-                game.effects[key + 'Timer'] = 0;
-            }
-            overlay.classList.remove('show');
-            pauseBtn.textContent = '⏸';
-            initWeather();
-            updateUI();
-        }
-
-        // ==================== UI Update ====================
-        function updateUI() {
-            scoreDisplay.textContent = game.score;
-            speedDisplay.textContent = Math.round(game.speed * 6);
-            levelDisplay.textContent = game.level;
-            highScore.textContent = game.highScore;
-        }
-
-        // ==================== Game Loop ====================
-        function update() {
-            if (game.paused || game.gameOver || !game.running) return;
-
-            const speedFactor = game.boosting ? 2.0 : (game.effects.slowMotion ? 0.4 : 1);
-            const currentSpeed = game.speed * speedFactor;
-            const maxSpeedLimit = game.effects.slowMotion ? 5 : MAX_SPEED;
-
-            // --- Speed ---
-            if (game.boosting && game.speed < maxSpeedLimit) {
-                game.speed += 0.2;
-            } else if (!game.boosting && game.speed > 5) {
-                game.speed -= 0.04;
-            }
-            game.speed = Math.max(MIN_SPEED, Math.min(game.speed, maxSpeedLimit));
-
-            if (game.speed > game.maxSpeedReached) {
-                game.maxSpeedReached = game.speed;
-            }
-
-            // --- Car Movement ---
-            const accel = 0.7;
-            const friction = 0.88;
-            if (keys.left) { game.velocityX -= accel; }
-            if (keys.right) { game.velocityX += accel; }
-            game.velocityX *= friction;
-            game.velocityX = Math.max(-6, Math.min(game.velocityX, 6));
-
-            game.carX += game.velocityX;
-            const carW = game.effects.giant ? CAR_W * 1.5 : (game.effects.tiny ? CAR_W * 0.6 : CAR_W);
-            game.carX = Math.max(5, Math.min(game.carX, W - carW - 5));
-            game.carAngle = game.velocityX * 0.04;
-
-            // --- Trail ---
-            if (game.frame % 2 === 0) {
-                game.trail.push({ x: game.carX + carW / 2, y: game.carY + CAR_H, life: 15 });
-                if (game.trail.length > 25) game.trail.shift();
-            }
-            for (let i = game.trail.length - 1; i >= 0; i--) {
-                game.trail[i].life--;
-                if (game.trail[i].life <= 0) game.trail.splice(i, 1);
-            }
-
-            // --- Boost Regen ---
-            if (game.boost < game.maxBoost) {
-                game.boost += 0.08;
-            }
-            game.boost = Math.min(game.boost, game.maxBoost);
-
-            // --- Shield Timer ---
-            if (game.shield) {
-                game.shieldTimer--;
-                if (game.shieldTimer <= 0) game.shield = false;
-            }
-
-            // --- Combo Timer ---
-            if (game.comboTimer > 0) {
-                game.comboTimer--;
-                if (game.comboTimer === 0) game.combo = 0;
-            }
-
-            // --- Update Effects ---
-            updateEffects();
-
-            // --- Road Offset ---
-            const effSpeed = game.effects.slowMotion ? currentSpeed * 0.3 : currentSpeed;
-            game.roadOffset = (game.roadOffset + effSpeed) % 50;
-            game.totalDistance += effSpeed;
-
-            // --- Spawn Obstacles ---
-            const spawnRate = Math.max(18, 55 - game.level * 3 - game.speed * 0.5);
-            if (game.frame % Math.floor(spawnRate) === 0 && game.obstacles.length < 8) {
-                spawnObstacle();
-            }
-
-            // --- Spawn Items ---
-            if (game.frame % 80 === 0 && game.items.length < 5) {
-                spawnItem();
-            }
-
-            // --- Update Obstacles ---
-            for (let i = game.obstacles.length - 1; i >= 0; i--) {
-                const obs = game.obstacles[i];
-                const obsSpeed = game.effects.slowMotion ? currentSpeed * 0.2 : currentSpeed * 0.5;
-                obs.y += obsSpeed * 0.6;
-                obs.rotation += 0.01;
-
-                if (obs.y > H + 60) {
-                    game.obstacles.splice(i, 1);
-                    continue;
-                }
-
-                // Collision with car
-                const carW2 = game.effects.giant ? CAR_W * 1.5 : (game.effects.tiny ? CAR_W * 0.6 : CAR_W);
-                const carH2 = game.effects.giant ? CAR_H * 1.5 : (game.effects.tiny ? CAR_H * 0.6 : CAR_H);
-                const car = { x: game.carX, y: game.carY, w: carW2, h: carH2 };
-                const obsRect = { x: obs.x, y: obs.y, w: obs.width, h: obs.height };
-
-                if (rectCollide(car.x, car.y, car.w, car.h, obsRect.x, obsRect.y, obsRect.w, obsRect.h)) {
-                    if (game.shield || game.effects.invincible || game.effects.ghost) {
-                        spawnParticles(obs.x + obs.width / 2, obs.y + obs.height / 2, '#00ffaa', 15);
-                        game.obstacles.splice(i, 1);
-                        game.score += game.effects.doublePoints ? 6 : 3;
-                        game.combo += 2;
-                        game.comboTimer = 60;
-                        updateUI();
-                        continue;
-                    }
-                    gameOver();
+            if (!isConnected) {
+                // ---- اتصال ----
+                if (!config) {
+                    setLog('⚠️ لطفاً کانفیگ را وارد کنید!', 'error');
                     return;
                 }
 
-                // Passed obstacle
-                if (!obs.passed && obs.y > game.carY + CAR_H) {
-                    obs.passed = true;
-                    game.obstaclesPassedCount++;
-                    const basePoints = 1 + Math.floor(game.combo / 3);
-                    game.score += game.effects.doublePoints ? basePoints * 2 : basePoints;
-                    game.combo++;
-                    game.comboTimer = 60;
-                    updateUI();
+                // تشخیص نوع کانفیگ
+                let type = 'unknown';
+                if (config.startsWith('vless://')) type = 'VLESS';
+                else if (config.startsWith('vmess://')) type = 'VMess';
+                else if (config.startsWith('trojan://')) type = 'Trojan';
+                else if (config.startsWith('ss://')) type = 'Shadowsocks';
+                else if (config.includes('@') && config.includes(':')) type = 'Custom';
 
-                    if (game.obstaclesPassedCount % 15 === 0) {
-                        game.level++;
-                        spawnParticles(W / 2, H / 2, '#ffd700', 30);
+                setLog(`🔄 در حال اتصال به ${type}...`, 'info');
+
+                isConnecting = true;
+                connectBtn.classList.add('connecting');
+                connectBtn.querySelector('.label').textContent = '...';
+                statusDot.className = 'status-dot';
+
+                // شبیه‌سازی پروسه اتصال (۱٫۵ تا ۳ ثانیه)
+                const connectTime = 1500 + Math.random() * 1500;
+
+                setTimeout(() => {
+                    isConnecting = false;
+                    connectBtn.classList.remove('connecting');
+
+                    // ۹۰٪ شانس موفقیت (واقع‌گرایانه)
+                    const success = Math.random() < 0.9;
+
+                    if (success) {
+                        isConnected = true;
+                        connectBtn.classList.add('connected');
+                        connectBtn.querySelector('.icon').textContent = '🔗';
+                        connectBtn.querySelector('.label').textContent = 'وصل';
+                        statusDot.className = 'status-dot connected';
+                        setLog(`✅ متصل به ${type} | IP: ۱۰.۲۴.۳۴.${Math.floor(Math.random()*255)}`, 'success');
+
+                        // شروع آمار
+                        const basePing = 20 + Math.random() * 70;
+                        updateStats(Math.round(basePing), 0, 0);
+                        startPingSimulation();
+                        startTrafficSimulation();
+
+                    } else {
+                        // اتصال ناموفق
+                        isConnected = false;
+                        connectBtn.classList.remove('connected');
+                        connectBtn.querySelector('.icon').textContent = '⏻';
+                        connectBtn.querySelector('.label').textContent = 'اتصال';
+                        statusDot.className = 'status-dot';
+                        setLog('❌ اتصال ناموفق! کانفیگ را بررسی کنید.', 'error');
+                        updateStats('--', 0, 0);
                     }
-                }
+                }, connectTime);
+
+            } else {
+                // ---- قطع اتصال ----
+                disconnect();
             }
-
-            // --- Update Items ---
-            for (let i = game.items.length - 1; i >= 0; i--) {
-                const item = game.items[i];
-                const itemSpeed = game.effects.slowMotion ? currentSpeed * 0.2 : currentSpeed * 0.4;
-                item.y += itemSpeed * 0.5;
-                item.rotation += 0.06;
-                item.pulse = Math.sin(game.frame * 0.07 + i) * 0.3 + 0.7;
-
-                if (item.y > H + 40) {
-                    game.items.splice(i, 1);
-                    continue;
-                }
-
-                // Collision with car
-                const carW2 = game.effects.giant ? CAR_W * 1.5 : (game.effects.tiny ? CAR_W * 0.6 : CAR_W);
-                const carH2 = game.effects.giant ? CAR_H * 1.5 : (game.effects.tiny ? CAR_H * 0.6 : CAR_H);
-                if (rectCollide(game.carX, game.carY, carW2, carH2, item.x - 18, item.y - 18, 36, 36)) {
-                    applyItemEffect(item);
-                    game.items.splice(i, 1);
-                    updateUI();
-                }
-            }
-
-            // --- Update Particles ---
-            updateParticles();
-
-            // --- Update Weather ---
-            if (game.weather === 'rain') {
-                for (const drop of game.rainDrops) {
-                    drop.y += drop.speed;
-                    drop.x += 1.2;
-                    if (drop.y > H) { drop.y = -10;
-                        drop.x = Math.random() * W; }
-                    if (drop.x > W) { drop.x = -5; }
-                }
-            }
-            if (game.weather === 'snow') {
-                for (const flake of game.snowFlakes) {
-                    flake.y += flake.speed;
-                    flake.x += flake.drift + Math.sin(game.frame * 0.01 + flake.x) * 0.4;
-                    if (flake.y > H) { flake.y = -5;
-                        flake.x = Math.random() * W; }
-                }
-            }
-
-            // --- Level Difficulty ---
-            if (game.level > 2 && game.frame % 200 === 0) {
-                spawnObstacle();
-            }
-
-            game.frame++;
         }
 
-        // ==================== Game Over ====================
-        function gameOver() {
-            game.running = false;
-            game.gameOver = true;
-            if (game.score > game.highScore) {
-                game.highScore = game.score;
-                localStorage.setItem('racerUltimateHigh', String(game.highScore));
-            }
-            finalScore.textContent = game.score;
-            highScore.textContent = game.highScore;
-            obstaclesPassed.textContent = game.obstaclesPassedCount;
-            maxSpeed.textContent = Math.round(game.maxSpeedReached * 6);
-            collectibles.textContent = game.collectiblesCount;
-            overlay.classList.add('show');
-            spawnParticles(W / 2, H / 2, '#ff2255', 50);
-            spawnParticles(W / 2 - 60, H / 2 - 40, '#ff8800', 30);
-            spawnParticles(W / 2 + 60, H / 2 - 40, '#ff8800', 30);
+        function disconnect() {
+            isConnected = false;
+            isConnecting = false;
+
+            if (statsInterval) clearInterval(statsInterval);
+            if (pingInterval) clearInterval(pingInterval);
+
+            connectBtn.classList.remove('connected', 'connecting');
+            connectBtn.querySelector('.icon').textContent = '⏻';
+            connectBtn.querySelector('.label').textContent = 'اتصال';
+            statusDot.className = 'status-dot';
+
+            updateStats('--', 0, 0);
+            setLog('🔌 اتصال قطع شد.', 'info');
         }
 
-        // ==================== Render ====================
-        function draw() {
-            ctx.clearRect(0, 0, W, H);
+        // ---- Events ----
+        connectBtn.addEventListener('click', toggleConnection);
 
-            // --- Background ---
-            const bgColors = {
-                day: '#0d0d1a',
-                night: '#080810',
-                sunset: '#1a0d0a'
-            };
-            ctx.fillStyle = bgColors[game.timeOfDay] || '#0d0d1a';
-            ctx.fillRect(0, 0, W, H);
-
-            // --- Stars ---
-            const starAlpha = game.timeOfDay === 'night' ? 1 : 0.2;
-            for (const star of game.stars) {
-                const bright = star.brightness * (0.6 + 0.4 * Math.sin(game.frame * star.twinkle));
-                ctx.globalAlpha = bright * starAlpha;
-                ctx.fillStyle = '#fff';
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
+        // Enter key on textarea
+        configInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                toggleConnection();
             }
-            ctx.globalAlpha = 1;
+        });
 
-            // --- Fog ---
-            if (game.weather === 'fog') {
-                ctx.fillStyle = 'rgba(180,180,200,0.06)';
-                ctx.fillRect(0, 0, W, H);
-                for (let i = 0; i < 6; i++) {
-                    const x = (i * 80 + game.frame * 0.15) % (W + 100) - 50;
-                    const y = 80 + i * 100 + Math.sin(game.frame * 0.008 + i) * 40;
-                    const grad = ctx.createRadialGradient(x, y, 10, x, y, 140);
-                    grad.addColorStop(0, 'rgba(200,200,210,0.05)');
-                    grad.addColorStop(1, 'rgba(200,200,210,0)');
-                    ctx.fillStyle = grad;
-                    ctx.fillRect(x - 140, y - 140, 280, 280);
-                }
-            }
+        // ---- Auto-detect config type on paste ----
+        configInput.addEventListener('input', () => {
+            const val = configInput.value.trim();
+            if (val.startsWith('vless://')) setLog('🔍 شناسایی شد: VLESS', 'info');
+            else if (val.startsWith('vmess://')) setLog('🔍 شناسایی شد: VMess', 'info');
+            else if (val.startsWith('trojan://')) setLog('🔍 شناسایی شد: Trojan', 'info');
+            else if (val.startsWith('ss://')) setLog('🔍 شناسایی شد: Shadowsocks', 'info');
+            else if (val.length > 20) setLog('📝 کانفیگ وارد شد، آماده اتصال', 'info');
+        });
 
-            // --- Road ---
-            const roadGrad = ctx.createLinearGradient(0, 0, 0, H);
-            roadGrad.addColorStop(0, '#1a1a2e');
-            roadGrad.addColorStop(0.5, '#22223e');
-            roadGrad.addColorStop(1, '#1a1a2e');
-            ctx.fillStyle = roadGrad;
-            ctx.fillRect(0, 0, W, H);
+        // ---- Init ----
+        setLog('⏳ آماده اتصال...', 'info');
+        updateStats('--', 0, 0);
 
-            // Road glow
-            ctx.shadowColor = '#00ffaa22';
-            ctx.shadowBlur = 20;
-            ctx.strokeStyle = '#00ffaa33';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(2, 0);
-            ctx.lineTo(2, H);
-            ctx.moveTo(W - 2, 0);
-            ctx.lineTo(W - 2, H);
-            ctx.stroke();
-            ctx.shadowBlur = 0;
+        console.log('🛡️ ConnectX loaded');
+        console.log('📡 Supported: VLESS | VMess | Trojan | Shadowsocks');
+        console.log('💡 Press Ctrl+Enter to connect');
 
-            // Lane markings
-            ctx.strokeStyle = '#ffffff77';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([30, 22]);
-            ctx.lineDashOffset = -game.roadOffset;
-            for (let i = 1; i < LANE_COUNT; i++) {
-                const x = i * LANE_WIDTH;
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, H);
-                ctx.stroke();
-            }
-            ctx.setLineDash([]);
+        // =====================================================
+        //  💡 برای تبدیل به اپلیکیشن دسکتاپ با Electron:
+        //  نکات در کامنت‌های پایین فایل
+        // =====================================================
 
-            // Edge lines
-            ctx.strokeStyle = '#ffd70033';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, H);
-            ctx.moveTo(W, 0);
-            ctx.lineTo(W, H);
-            ctx.stroke();
-
-            // --- Speed lines ---
-            if (game.speed > 7) {
-                const intensity = (game.speed - 7) / 7;
-                ctx.strokeStyle = `rgba(255,255,255,${intensity * 0.06})`;
-                ctx.lineWidth = 1.5;
-                for (let i = 0; i < 8; i++) {
-                    const x = (i * 55 + game.frame * 0.8) % W;
-                    const y = (game.frame * (2 + intensity * 4)) % H;
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                    ctx.lineTo(x + 1, y + 30 + intensity * 50);
-                    ctx.stroke();
-                }
-            }
-
-            // --- Items ---
-            for (const item of game.items) {
-                const size = item.size * item.pulse;
-                const x = item.x;
-                const y = item.y;
-
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(item.rotation);
-
-                // Glow
-                ctx.shadowColor = item.color;
-                ctx.shadowBlur = 25;
-
-                // Background circle
-                ctx.fillStyle = item.color + '44';
-                ctx.beginPath();
-                ctx.arc(0, 0, size + 4, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Main circle
-                ctx.fillStyle = item.color;
-                ctx.beginPath();
-                ctx.arc(0, 0, size, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.shadowBlur = 0;
-
-                // Symbol
-                ctx.fillStyle = '#fff';
-                ctx.font = `${size * 0.9}px Arial`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(item.symbol, 0, 1);
-
-                ctx.restore();
-            }
-
-            // --- Obstacles ---
-            for (const obs of game.obstacles) {
-                const x = obs.x;
-                const y = obs.y;
-                const w = obs.width;
-                const h = obs.height;
-
-                ctx.save();
-                ctx.translate(x + w / 2, y + h / 2);
-                ctx.rotate(obs.rotation || 0);
-
-                // Shadow
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 20;
-                ctx.shadowOffsetY = 4;
-
-                // Body
-                const grad = ctx.createLinearGradient(-w / 2, -h / 2, w / 2, h / 2);
-                grad.addColorStop(0, obs.color);
-                grad.addColorStop(0.5, '#ffffff44');
-                grad.addColorStop(1, obs.color);
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.roundRect(-w / 2, -h / 2, w, h, 6);
-                ctx.fill();
-
-                // Windows
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = 'rgba(100,200,255,0.25)';
-                ctx.beginPath();
-                ctx.roundRect(-w * 0.35, -h * 0.35, w * 0.25, h * 0.2, 3);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.roundRect(w * 0.1, -h * 0.35, w * 0.25, h * 0.2, 3);
-                ctx.fill();
-
-                // Headlights
-                ctx.fillStyle = '#ffdd44';
-                ctx.shadowColor = '#ffdd44aa';
-                ctx.shadowBlur = 10;
-                ctx.beginPath();
-                ctx.arc(-w * 0.3, -h * 0.42, 4, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.arc(w * 0.3, -h * 0.42, 4, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.restore();
-                ctx.shadowBlur = 0;
-                ctx.shadowOffsetY = 0;
-            }
-
-            // --- Trail ---
-            for (const t of game.trail) {
-                const alpha = t.life / 15;
-                ctx.fillStyle = `rgba(255,100,50,${alpha * 0.12})`;
-                ctx.beginPath();
-                ctx.arc(t.x, t.y, 5 * alpha, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            // --- Player Car ---
-            const carW = game.effects.giant ? CAR_W * 1.5 : (game.effects.tiny ? CAR_W * 0.6 : CAR_W);
-            const carH = game.effects.giant ? CAR_H * 1.5 : (game.effects.tiny ? CAR_H * 0.6 : CAR_H);
-            const cx = game.carX;
-            const cy = game.carY;
-
-            // Rainbow effect
-            let carColor = game.carColor;
-            if (game.effects.rainbow) {
-                const hue = (game.frame * 2) % 360;
-                carColor = `hsl(${hue}, 90%, 55%)`;
-            }
-
-            // Shield effect
-            if (game.shield || game.effects.invincible) {
-                ctx.shadowColor = '#00ccff';
-                ctx.shadowBlur = 50;
-                ctx.strokeStyle = `rgba(0,204,255,${0.3 + 0.3 * Math.sin(game.frame * 0.08)})`;
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.arc(cx + carW / 2, cy + carH / 2, carW * 0.9, 0, Math.PI * 2);
-                ctx.stroke();
-                ctx.shadowBlur = 0;
-            }
-
-            // Ghost effect
-            if (game.effects.ghost) {
-                ctx.globalAlpha = 0.5;
-            }
-
-            // Car shadow
-            ctx.shadowColor = 'rgba(0,0,0,0.6)';
-            ctx.shadowBlur = 30;
-            ctx.shadowOffsetY = 8;
-
-            // Car body
-            ctx.save();
-            ctx.translate(cx + carW / 2, cy + carH / 2);
-            ctx.rotate(game.carAngle);
-
-            const bodyGrad = ctx.createLinearGradient(-carW / 2, -carH / 2, carW / 2, carH / 2);
-            bodyGrad.addColorStop(0, carColor);
-            bodyGrad.addColorStop(0.3, '#ff6688');
-            bodyGrad.addColorStop(0.7, carColor);
-            bodyGrad.addColorStop(1, '#991122');
-            ctx.fillStyle = bodyGrad;
-            ctx.shadowColor = carColor + '66';
-            ctx.shadowBlur = 30;
-            ctx.beginPath();
-            ctx.roundRect(-carW / 2, -carH / 2, carW, carH, 8);
-            ctx.fill();
-
-            // Racing stripe
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = 'rgba(255,255,255,0.12)';
-            ctx.fillRect(-2, -carH / 2 + 6, 4, carH - 12);
-
-            // Windows
-            ctx.fillStyle = 'rgba(80,200,255,0.3)';
-            ctx.beginPath();
-            ctx.roundRect(-carW / 2 + 4, -carH / 2 + 5, carW * 0.22, carH * 0.25, 3);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.roundRect(carW / 2 - 4 - carW * 0.22, -carH / 2 + 5, carW * 0.22, carH * 0.25, 3);
-            ctx.fill();
-
-            // Headlights
-            ctx.fillStyle = '#ffdd44';
-            ctx.shadowColor = '#ffdd44aa';
-            ctx.shadowBlur = 15;
-            ctx.beginPath();
-            ctx.arc(-carW / 2 + 6, -carH / 2 + 4, 4, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(carW / 2 - 6, -carH / 2 + 4, 4, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Taillights
-            ctx.fillStyle = '#ff2200';
-            ctx.shadowColor = '#ff2200aa';
-            ctx.shadowBlur = 20;
-            ctx.beginPath();
-            ctx.arc(-carW / 2 + 5, carH / 2 - 4, 3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(carW / 2 - 5, carH / 2 - 4, 3, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.restore();
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetY = 0;
-            ctx.globalAlpha = 1;
-
-            // --- Boost flame ---
-            if (game.boosting) {
-                ctx.shadowColor = '#ff8800';
-                ctx.shadowBlur = 50;
-                for (let i = 0; i < 8; i++) {
-                    const fx = cx + carW / 2 + (Math.random() - 0.5) * carW * 0.5;
-                    const fy = cy + carH + 2 + Math.random() * 20;
-                    const size = 4 + Math.random() * 14;
-                    const alpha = 0.2 + Math.random() * 0.6;
-                    const colors = ['#ff4400', '#ff8800', '#ffcc00', '#ff2200'];
-                    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)] + Math.floor(alpha * 255).toString(16)
-                        .padStart(2, '0');
-                    ctx.beginPath();
-                    ctx.arc(fx, fy, size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.shadowBlur = 0;
-            }
-
-            // --- Particles ---
-            for (const p of game.particles) {
-                const alpha = p.life / p.maxLife;
-                ctx.globalAlpha = alpha;
-                ctx.fillStyle = p.color;
-                ctx.shadowColor = p.color;
-                ctx.shadowBlur = 10;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size * (0.5 + 0.5 * alpha), 0, Math.PI * 2);
-                ctx.fill();
-            }
-            ctx.globalAlpha = 1;
-            ctx.shadowBlur = 0;
-
-            // --- Rain ---
-            if (game.weather === 'rain') {
-                ctx.strokeStyle = 'rgba(150,180,255,0.12)';
-                ctx.lineWidth = 1.5;
-                for (const drop of game.rainDrops) {
-                    ctx.beginPath();
-                    ctx.moveTo(drop.x, drop.y);
-                    ctx.lineTo(drop.x + 1.5, drop.y + drop.length);
-                    ctx.stroke();
-                }
-            }
-
-            // --- Snow ---
-            if (game.weather === 'snow') {
-                for (const flake of game.snowFlakes) {
-                    ctx.fillStyle = `rgba(255,255,255,${0.2 + Math.random() * 0.3})`;
-                    ctx.beginPath();
-                    ctx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-
-            // --- Boost Meter ---
-            const boostPercent = game.boost / game.maxBoost;
-            ctx.fillStyle = 'rgba(0,0,0,0.6)';
-            ctx.roundRect(10, H - 28, 70, 10, 5);
-            ctx.fill();
-            const boostColor = boostPercent > 0.3 ? '#ff8800' : '#ff2200';
-            ctx.fillStyle = boostColor;
-            ctx.shadowColor = boostColor;
-            ctx.shadowBlur = 8;
-            ctx.roundRect(12, H - 26, 66 * boostPercent, 6, 3);
-            ctx.fill();
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = '#aaa';
-            ctx.font = '7px Arial';
-            ctx.fillText('🚀', 8, H - 20);
-
-            // --- Level & Combo ---
-            ctx.fillStyle = '#ffd70077';
-            ctx.font = 'bold 12px Arial';
-            ctx.textAlign = 'right';
-            ctx.fillText(`Lv.${game.level}`, W - 8, 30);
-
-            if (game.combo > 2) {
-                ctx.fillStyle = `rgba(255,200,50,${0.5 + 0.5 * Math.sin(game.frame * 0.08)})`;
-                ctx.font = 'bold 14px Arial';
-                ctx.fillText(`🔥 ${game.combo}x`, W - 8, 48);
-            }
-
-            // --- Active effects display ---
-            let effectY = 58;
-            const effectsList = [];
-            if (game.effects.magnet) effectsList.push('🧲 Magnet');
-            if (game.effects.doublePoints) effectsList.push('2x Points');
-            if (game.effects.invincible) effectsList.push('🛡️ Invincible');
-            if (game.effects.slowMotion) effectsList.push('🐢 Slow');
-            if (game.effects.ghost) effectsList.push('👻 Ghost');
-            if (game.effects.rainbow) effectsList.push('🌈 Rainbow');
-            if (game.effects.giant) effectsList.push('🦍 Giant');
-            if (game.effects.tiny) effectsList.push('🐭 Tiny');
-
-            for (const eff of effectsList) {
-                ctx.fillStyle = 'rgba(255,255,255,0.5)';
-                ctx.font = '9px Arial';
-                ctx.textAlign = 'right';
-                ctx.fillText(eff, W - 8, effectY);
-                effectY += 14;
-            }
-
-            // --- Vignette ---
-            const vigGrad = ctx.createRadialGradient(W / 2, H / 2, H * 0.25, W / 2, H / 2, H * 0.9);
-            vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
-            vigGrad.addColorStop(1, 'rgba(0,0,0,0.3)');
-            ctx.fillStyle = vigGrad;
-            ctx.fillRect(0, 0, W, H);
-        }
-
-        // ==================== RoundRect polyfill ====================
-        if (!CanvasRenderingContext2D.prototype.roundRect) {
-            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
-                const r = typeof radii === 'number' ? radii : (radii || 0);
-                this.moveTo(x + r, y);
-                this.lineTo(x + w - r, y);
-                this.quadraticCurveTo(x + w, y, x + w, y + r);
-                this.lineTo(x + w, y + h - r);
-                this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-                this.lineTo(x + r, y + h);
-                this.quadraticCurveTo(x, y + h, x, y + h - r);
-                this.lineTo(x, y + r);
-                this.quadraticCurveTo(x, y, x + r, y);
-                return this;
-            };
-        }
-
-        // ==================== Main Loop ====================
-        function gameLoop() {
-            update();
-            draw();
-            updateUI();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // ==================== Init ====================
-        function init() {
-            setupInput();
-            initStars();
-            initWeather();
-            game.running = true;
-            overlay.classList.remove('show');
-            restartGame();
-            gameLoop();
-            console.log('🏁 Speed Racer Ultimate loaded!');
-            console.log('🎮 Controls: Arrow keys / Touch buttons');
-            console.log('🚀 Boost: Space / B button');
-            console.log('⏸ Pause: P');
-            console.log('📊 25+ item types, 500+ combinations!');
-            console.log('🌈 Effects: Magnet, Double, Invincible, Slow, Ghost, Rainbow, Giant, Tiny');
-            console.log('💎 Rare items: Diamond, Golden Star, Ultra Shield, Mega Boost');
-        }
-
-        init();
+        /*
+         * ============================================================
+         *  🖥️ تبدیل به اپلیکیشن دسکتاپ با Electron
+         * ============================================================
+         *
+         * ۱. نصب Node.js و npm
+         * ۲. در پوشه پروژه:
+         *    npm init -y
+         *    npm install electron
+         *
+         * ۳. فایل main.js بسازید:
+         *    const { app, BrowserWindow } = require('electron');
+         *    function createWindow() {
+         *      const win = new BrowserWindow({
+         *        width: 480, height: 720,
+         *        resizable: false,
+         *        webPreferences: { nodeIntegration: true, contextIsolation: false }
+         *      });
+         *      win.loadFile('index.html');
+         *    }
+         *    app.whenReady().then(createWindow);
+         *
+         * ۴. در package.json، "main": "main.js" و "scripts": { "start": "electron ." }
+         * ۵. اجرا: npm start
+         *
+         * ۶. برای ساخت exe:
+         *    npm install -g electron-builder
+         *    electron-builder --win --mac --linux
+         * ============================================================
+         */
     </script>
+
 </body>
 </html>
