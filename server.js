@@ -1,4 +1,3 @@
-cat > server.js << 'EOF'
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
@@ -28,7 +27,7 @@ app.post('/api/create-config', (req, res) => {
     const { name, traffic } = req.body;
     const uuid = uuidv4();
     const configId = uuidv4().slice(0, 8);
-    const domain = 'parham-mini-game-production.up.railway.app';
+    const domain = process.env.RAILWAY_URL || 'parham-mini-game-production.up.railway.app';
     const path = `/${uuid.slice(0, 8)}`;
     
     const vlessLink = `vless://${uuid}@${domain}:443?encryption=none&security=tls&sni=${domain}&fp=chrome&type=ws&host=${domain}&path=${path}#${name || 'MyConfig'}`;
@@ -62,4 +61,3 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📊 Configs stored: ${configs.length}`);
 });
-EOF
